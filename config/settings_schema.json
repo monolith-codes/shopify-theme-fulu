@@ -1,0 +1,27 @@
+[
+    {
+        "name": "theme_info",
+        "theme_name" : "Monolith Default Theme",
+        "theme_author" : "Monolith",
+        "theme_version" : "1.0.0",
+        "theme_documentation_url" : "https://github.com/Shopfiy/shopify-cli",
+        "theme_support_url" : "https://github.com/Shopfiy/shopify-cli/issues"
+    },
+    {
+        "name": "General Settings",
+        "settings": [
+            {
+                "type": "text",
+                "id": "site_name",
+                "label": "Site Name",
+                "default": "My Awesome Shit"
+            },
+            {
+                "type": "textarea",
+                "id": "site_description",
+                "label": "Site Description",
+                "default": "THis is a great place for creatives."
+            }
+        ]
+    }
+]
