@@ -1,0 +1,520 @@
+{% comment %}
+  Fulu Style Product Page
+  - Minimalist split layout
+  - Sticky product info
+  - Accordion details
+{% endcomment %}
+
+{% assign show_vendor = true %}
+{% assign show_shipping = true %}
+{% assign show_dimensions = true %}
+{% assign unique_id = 'product-' | append: product.id %}
+
+<style>
+  .fulu-product-section {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #000;
+    line-height: 1.5;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  .fulu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  @media (min-width: 990px) {
+    .fulu-grid {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+  }
+
+  /* Gallery */
+  .fulu-gallery {
+    position: relative;
+    width: 100%;
+  }
+
+  .fulu-gallery-item {
+    display: none;
+    width: 100%;
+  }
+
+  .fulu-gallery-item.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .fulu-gallery img, .fulu-gallery video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    background-color: #f4f4f4;
+  }
+
+  .fulu-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 20px;
+    color: #000;
+    z-index: 10;
+    transition: opacity 0.2s;
+    opacity: 0.6;
+  }
+
+  .fulu-nav-btn:hover {
+    opacity: 1;
+  }
+
+  .fulu-prev { left: 0; }
+  .fulu-next { right: 0; }
+
+  @keyframes fadeIn {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+  }
+
+  /* Product Info */
+  .fulu-info {
+    position: relative;
+    padding-top: 20px;
+  }
+
+  @media (min-width: 990px) {
+    .fulu-info {
+      position: sticky;
+      top: 40px;
+      max-width: 480px;
+    }
+  }
+
+  .fulu-vendor {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    margin-bottom: 15px;
+    display: block;
+  }
+
+  .fulu-title {
+    font-size: 2rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+  }
+
+  .fulu-price {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    color: #333;
+  }
+
+  .fulu-price s {
+    color: #999;
+    font-size: 0.9rem;
+  }
+
+  /* Form Elements */
+  .fulu-form-group {
+    margin-bottom: 30px;
+  }
+
+  .fulu-label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .fulu-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fulu-option-btn {
+    border: 1px solid #e0e0e0;
+    background: transparent;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .fulu-option-btn:hover {
+    border-color: #000;
+  }
+
+  .fulu-option-btn.selected {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  /* Color Swatches */
+  .fulu-option-color {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  
+  .fulu-option-color:hover {
+    transform: scale(1.1);
+  }
+
+  .fulu-option-color.selected::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 1px solid #000;
+    border-radius: 50%;
+  }
+
+  .fulu-add-to-cart {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+    border-radius: 0;
+  }
+
+  .fulu-add-to-cart:hover {
+    background-color: #333;
+  }
+
+  .fulu-add-to-cart:disabled {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+  }
+
+  /* Accordions */
+  .fulu-accordion {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 60px;
+  }
+
+  .fulu-accordion-item {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .fulu-accordion-header {
+    padding: 25px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .fulu-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  .fulu-accordion-content.active {
+    max-height: 1000px;
+    padding-bottom: 25px;
+  }
+
+  .fulu-icon-plus {
+    font-size: 1.2rem;
+    font-weight: 300;
+    transition: transform 0.3s;
+  }
+
+  .fulu-accordion-header.active .fulu-icon-plus {
+    transform: rotate(45deg);
+  }
+</style>
+
+<div class="fulu-product-section" itemscope itemtype="http://schema.org/Product">
+  <div class="fulu-grid">
+    
+    <!-- Left: Gallery -->
+    <div class="fulu-gallery">
+      {% for media in product.media %}
+        <div class="fulu-gallery-item {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
+          {% case media.media_type %}
+            {% when 'image' %}
+              <img 
+                src="{{ media | image_url: width: 1400 }}" 
+                alt="{{ media.alt | escape }}"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                width="{{ media.width }}"
+                height="{{ media.height }}"
+              >
+            {% when 'video' %}
+              {{ media | video_tag: controls: true, autoplay: true, loop: true, image_size: '1400x' }}
+            {% when 'external_video' %}
+              {{ media | external_video_tag }}
+          {% endcase %}
+        </div>
+      {% endfor %}
+      {% if product.media.size > 1 %}
+        <button class="fulu-nav-btn fulu-prev" aria-label="Previous">&lt;</button>
+        <button class="fulu-nav-btn fulu-next" aria-label="Next">&gt;</button>
+      {% endif %}
+    </div>
+
+    <!-- Right: Product Info -->
+    <div class="fulu-info">
+      {% if show_vendor %}
+        <span class="fulu-vendor">{{ product.vendor }}</span>
+      {% endif %}
+      
+      <h1 class="fulu-title">{{ product.title }}</h1>
+      
+      <div class="fulu-price">
+        <span id="Price-{{ unique_id }}">{{ product.selected_or_first_available_variant.price | money }}</span>
+        {% if product.compare_at_price_max > product.price %}
+          <s id="ComparePrice-{{ unique_id }}">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+        {% endif %}
+      </div>
+
+      {% form 'product', product %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <div class="fulu-form-group">
+              <label class="fulu-label">{{ option.name }}: <span class="selected-value">{{ option.selected_value }}</span></label>
+              
+              <div class="fulu-options">
+                {% for value in option.values %}
+                  {% assign option_name_downcase = option.name | downcase %}
+                  {% assign is_color = false %}
+                  {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+                    {% assign is_color = true %}
+                  {% endif %}
+
+                  {% if is_color %}
+                    <div 
+                      class="fulu-option-color {% if option.selected_value == value %}selected{% endif %}"
+                      style="background-color: {{ value | handle }};"
+                      data-value="{{ value | escape }}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      title="{{ value }}"
+                    ></div>
+                  {% else %}
+                    <button 
+                      type="button" 
+                      class="fulu-option-btn {% if option.selected_value == value %}selected{% endif %}"
+                      data-value="{{ value | escape }}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                    >
+                      {{ value }}
+                    </button>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endunless %}
+
+        <button 
+          type="submit" 
+          name="add" 
+          class="fulu-add-to-cart"
+          {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+        >
+          {% if product.selected_or_first_available_variant.available %}
+            Add to Cart
+          {% else %}
+            Sold Out
+          {% endif %}
+        </button>
+      {% endform %}
+
+      <div class="fulu-accordion">
+        <!-- Description -->
+        <div class="fulu-accordion-item">
+          <div class="fulu-accordion-header active">
+            <span>Description</span>
+            <span class="fulu-icon-plus">+</span>
+          </div>
+          <div class="fulu-accordion-content active" style="max-height: none;">
+            <div style="padding-bottom: 20px;">
+              {{ product.description }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Dimensions -->
+        {% if show_dimensions %}
+        <div class="fulu-accordion-item">
+          <div class="fulu-accordion-header">
+            <span>Dimensions</span>
+            <span class="fulu-icon-plus">+</span>
+          </div>
+          <div class="fulu-accordion-content">
+            <div style="padding-bottom: 20px;">
+              <p>W 87cm x D 102cm x H 70cm</p>
+              <p>Seat Height: 38cm</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Shipping -->
+        {% if show_shipping %}
+        <div class="fulu-accordion-item">
+          <div class="fulu-accordion-header">
+            <span>Shipping & Returns</span>
+            <span class="fulu-icon-plus">+</span>
+          </div>
+          <div class="fulu-accordion-content">
+            <div style="padding-bottom: 20px;">
+              <p>Free worldwide shipping on all orders. Returns accepted within 14 days of delivery.</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Accordion Logic
+    const headers = document.querySelectorAll('.fulu-accordion-header');
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        header.classList.toggle('active');
+        content.classList.toggle('active');
+        
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    });
+
+    // Gallery Slider Logic
+    const slides = document.querySelectorAll('.fulu-gallery-item');
+    const prevBtn = document.querySelector('.fulu-prev');
+    const nextBtn = document.querySelector('.fulu-next');
+    let currentSlide = 0;
+
+    if (slides.length > 1 && prevBtn && nextBtn) {
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        currentSlide = index;
+      }
+      prevBtn.addEventListener('click', () => {
+        showSlide((currentSlide - 1 + slides.length) % slides.length);
+      });
+      nextBtn.addEventListener('click', () => {
+        showSlide((currentSlide + 1) % slides.length);
+      });
+    }
+
+    // Variant Selection Logic
+    const product = {{ product | json }};
+    const options = document.querySelectorAll('.fulu-option-btn, .fulu-option-color');
+    const hiddenInput = document.querySelector('input[name="id"]');
+    const priceDisplay = document.querySelector('[id^="Price-"]');
+    const comparePriceDisplay = document.querySelector('[id^="ComparePrice-"]');
+    const addToCartBtn = document.querySelector('.fulu-add-to-cart');
+
+    options.forEach(option => {
+      option.addEventListener('click', function() {
+        // Update UI
+        const parent = this.closest('.fulu-options');
+        parent.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+        this.classList.add('selected');
+
+        // Update Label Text
+        const labelSpan = this.closest('.fulu-form-group').querySelector('.selected-value');
+        if(labelSpan) labelSpan.textContent = this.dataset.value;
+
+        // Find Matching Variant
+        const selectedOptions = Array.from(document.querySelectorAll('.fulu-options .selected')).map(el => el.dataset.value);
+        
+        const matchedVariant = product.variants.find(variant => {
+          return variant.options.every((val, index) => val === selectedOptions[index]);
+        });
+
+        if (matchedVariant) {
+          hiddenInput.value = matchedVariant.id;
+          priceDisplay.textContent = formatMoney(matchedVariant.price);
+          
+          if(comparePriceDisplay) {
+             if(matchedVariant.compare_at_price > matchedVariant.price) {
+               comparePriceDisplay.textContent = formatMoney(matchedVariant.compare_at_price);
+               comparePriceDisplay.style.display = 'inline';
+             } else {
+               comparePriceDisplay.style.display = 'none';
+             }
+          }
+          
+          if (matchedVariant.available) {
+            addToCartBtn.disabled = false;
+            addToCartBtn.textContent = 'Add to Cart';
+          } else {
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Sold Out';
+          }
+
+          // Update URL without reload
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set('variant', matchedVariant.id);
+          window.history.replaceState(null, null, newUrl);
+        }
+      });
+    });
+
+    function formatMoney(cents) {
+      if (typeof Shopify !== 'undefined' && Shopify.formatMoney) {
+        return Shopify.formatMoney(cents);
+      }
+      return (cents / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    }
+  });
+</script>
