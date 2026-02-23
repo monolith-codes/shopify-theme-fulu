@@ -11,51 +11,74 @@
 {% assign unique_id = 'product-' | append: product.id %}
 
 <style>
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+
   .fulu-product-section {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #000;
     line-height: 1.5;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 60px 40px;
+    margin: 0;
+    padding: 0;
+    background-color: red;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .fulu-slider {
+    background-color: green;
   }
 
   .fulu-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 60px;
+    grid-template-rows: auto 1fr 1fr;
+    background-color: orange;
   }
 
-  @media (min-width: 990px) {
+  {% comment %} @media (min-width: 990px) {
     .fulu-grid {
       grid-template-columns: 1.5fr 1fr;
       gap: 100px;
       align-items: start;
     }
-  }
+  } {% endcomment %}
 
   /* Gallery */
   .fulu-gallery {
     position: relative;
     width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: red;
+    border-radius: 20px;
   }
 
   .fulu-gallery-item {
     display: none;
-    width: 100%;
   }
 
   .fulu-gallery-item.active {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
+    border-radius: 20px;
   }
 
   .fulu-gallery img, .fulu-gallery video {
     width: 100%;
     height: auto;
     display: block;
+    margin: auto;
+    max-height: 600px;
+    max-width: 100%;
     object-fit: cover;
     background-color: #f4f4f4;
+    border-radius: 20px;
   }
 
   .fulu-nav-btn {
@@ -64,7 +87,6 @@
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    font-size: 2rem;
     cursor: pointer;
     padding: 20px;
     color: #000;
@@ -77,8 +99,16 @@
     opacity: 1;
   }
 
-  .fulu-prev { left: 0; }
-  .fulu-next { right: 0; }
+
+  .fulu-prev { left: 10px; }
+  .fulu-next { right: 10px; }
+
+  .fulu-nav-btn-icon {
+    background-color: transparent !important;
+    color: red !important;
+    height:36px !important;
+    width: 36px !important;
+  }
 
   @keyframes fadeIn {
     from { opacity: 0.8; }
@@ -89,6 +119,7 @@
   .fulu-info {
     position: relative;
     padding-top: 20px;
+    background-color: blue;
   }
 
   @media (min-width: 990px) {
@@ -271,6 +302,10 @@
 </style>
 
 <div class="fulu-product-section" itemscope itemtype="http://schema.org/Product">
+  <div class="fulu-slider left">
+    
+  </div>
+
   <div class="fulu-grid">
     
     <!-- Left: Gallery -->
@@ -294,16 +329,20 @@
         </div>
       {% endfor %}
       {% if product.media.size > 1 %}
-        <button class="fulu-nav-btn fulu-prev" aria-label="Previous">&lt;</button>
-        <button class="fulu-nav-btn fulu-next" aria-label="Next">&gt;</button>
+        <button class="fulu-nav-btn fulu-prev" aria-label="Previous">
+          <img class="fulu-nav-btn-icon" src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/move-left-white.svg?v=1771802714" alt="Previous" width="50" height="50">
+        </button>
+        <button class="fulu-nav-btn fulu-next" aria-label="Next">
+          <img class="fulu-nav-btn-icon" src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/move-right-white.svg?v=1771802714" alt="Next" width="50" height="50">
+        </button>
       {% endif %}
     </div>
 
     <!-- Right: Product Info -->
     <div class="fulu-info">
-      {% if show_vendor %}
+      {% comment %} {% if show_vendor %}
         <span class="fulu-vendor">{{ product.vendor }}</span>
-      {% endif %}
+      {% endif %} {% endcomment %}
       
       <h1 class="fulu-title">{{ product.title }}</h1>
       
@@ -368,7 +407,7 @@
         </button>
       {% endform %}
 
-      <div class="fulu-accordion">
+      {% comment %} <div class="fulu-accordion">
         <!-- Description -->
         <div class="fulu-accordion-item">
           <div class="fulu-accordion-header active">
@@ -412,8 +451,12 @@
           </div>
         </div>
         {% endif %}
-      </div>
+      </div> {% endcomment %}
     </div>
+  </div>
+
+  <div class="fulu-slider right">
+    
   </div>
 </div>
 
