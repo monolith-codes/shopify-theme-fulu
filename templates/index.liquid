@@ -13,6 +13,7 @@
     }
 
     .fulu-home-grid-spacer {
+        opacity: 0;
         background-color: orange;
     }
 
@@ -160,8 +161,138 @@
         width: 100%;
         z-index: 100;
         background-color: red !important;
+        opacity: 0;
+    }
+
+    @media (max-width: 768px) {
+        .fulu-home-grid {
+            grid-template-columns: 1fr;
+        }
+        .fulu-home-grid-spacer {
+            display: none;
+        }
+        .fulu-home-grid-content {
+            grid-template-columns: 1fr;
+            grid-auto-rows: auto;
+            margin: 30px;
+        }
+        .fulu-home-grid-item {
+            grid-column: auto !important;
+            grid-row: auto !important;
+            aspect-ratio: 1 / 1.25;
+        }
+        .fulu-designer-info {
+            opacity: 1;
+        }
+    }
+
+    .fulu-logo-animation-container {
+        display: flex;
+        height: 100svh;
+        width: 100%;
+        overflow-y: auto;
+        position: absolute;
+        z-index: 1;
+        opacity: 80%;
+        pointer-events: none;
+    }
+    
+    .fulu-logo-animation-ceil {
+        width: 15svw;
+        height: 100%;
+        z-index: 1000 !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: none;
+    }
+
+    .fulu-logo-animation-row {
+        display: flex;
+        justify-content: flex-end;
+        width: 85svw;
+        height: 15svw;
+        z-index: 1000 !important;
+        align-self: end;
+        pointer-events: none;
+    }
+
+    .fulu-logo-animation-cell {
+        width: 15svw;
+        height: 15svw;
+        z-index: 1000 !important;
+        background-color: orange;
+        pointer-events: none;
     }
 </style>
+
+<div class="fulu-logo-animation-container">
+    <div class="fulu-logo-animation-ceil">
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-1"></div>
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-2"></div>
+    </div>
+
+    <div class="fulu-logo-animation-row">
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-3"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollContainer = document.querySelector('.fulu-home-container');
+        const cell1 = document.getElementById('fulu-animation-cell-1');
+        const cell2 = document.getElementById('fulu-animation-cell-2');
+        const cell3 = document.getElementById('fulu-animation-cell-3');
+
+        // Bail out early if any required element is missing
+        if (!scrollContainer || !cell1 || !cell2 || !cell3) return;
+
+        let ticking = false;
+        let maxScroll = 0;
+        let distanceY = 0;
+        let distanceX = 0;
+
+        function calculateDimensions() {
+            maxScroll = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
+            distanceY = cell2.offsetTop - cell1.offsetTop - cell1.offsetHeight;
+            distanceX = cell3.offsetLeft - (cell2.offsetLeft + cell2.offsetWidth);
+        }
+
+        function updatePosition() {
+            const scrollTop = scrollContainer.scrollTop;
+            
+            // Calculate and clamp fraction between 0 and 1 cleanly
+            const scrollFraction = maxScroll > 0 
+                ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 
+                : 0;
+
+            const translateY = distanceY * scrollFraction;
+            const translateX = -distanceX * scrollFraction;
+
+            cell1.style.transform = `translateY(${translateY}px)`;
+            cell3.style.transform = `translateX(${translateX}px)`;
+        }
+
+        scrollContainer.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updatePosition();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            calculateDimensions();
+            updatePosition();
+        });
+
+        // Initialize dimensions and trigger first render
+        calculateDimensions();
+        updatePosition();
+    });
+</script>
 
 <div class="fulu-home-container" itemscope itemtype="http://schema.org/IndexPage">
     <div class="fulu-home-grid">
