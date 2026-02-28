@@ -46,9 +46,14 @@
                 const r = Math.round(255 - (205 * progress));
                 const g = Math.round(255 - (87 * progress));
                 const b = Math.round(255 - (136 * progress));
-                container.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                const color = `rgb(${r}, ${g}, ${b})`;
+                container.style.backgroundColor = color;
+                document.body.style.backgroundColor = color;
+                document.documentElement.style.backgroundColor = color;
             } else {
                 container.style.backgroundColor = 'white';
+                document.body.style.backgroundColor = 'white';
+                document.documentElement.style.backgroundColor = 'white';
             }
         };
 
