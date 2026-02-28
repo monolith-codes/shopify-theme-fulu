@@ -10,6 +10,7 @@
         pointer-events: none;
         min-height: 700px;
         min-width: 500px;
+        z-index: 4000;
     }
     
     .fulu-logo-animation-ceil {
@@ -36,7 +37,7 @@
     }
 
     .fulu-logo-animation-cell {
-        z-index: 1000 !important;
+        z-index: 4000 !important;
         pointer-events: none;
         display: inline-flex; 
         width: fit-content;
@@ -208,6 +209,11 @@
         });
         
         window.addEventListener('resize', () => {
+            calculateDimensions();
+            updatePosition();
+        });
+
+        window.addEventListener('load', () => {
             calculateDimensions();
             updatePosition();
         });

@@ -3,43 +3,53 @@
 {% render 'logo-animation-overlay' %}
 
 <div class="fulu-content-container">
-  <div class="fulu-page-deliveryreturns-container">
+  <div class="fulu-page-faq-container">
     <div class="fulu-page-spacer"></div>
     <div class="fulu-page-content">
-      <div class="fulu-page-deliveryreturns">
-        <h1 class="fulu-deliveryreturns-title">Delivery & Returns</h1>
+      <div class="fulu-page-faq">
+        <h1 class="fulu-faq-title">Frequently Asked Questions</h1>
 
-        <div class="fulu-deliveryreturns-section">
-          <p>At SZENE CLUB, every order is treated with the utmost care—from the time of purchase until it reaches your home. Please find below essential details concerning our shipping, delivery, and return policies.</p>
+        <div class="fulu-faq-intro">
+          <p>Whether you're acquiring a new piece, exploring bespoke commissions, or curious about our creative services, we’ve answered some common queries below. If you need further assistance, feel free to contact us at <a href="mailto:contact@szene.club">contact@szene.club</a>.</p>
         </div>
 
-        <div class="fulu-deliveryreturns-section">
-          <h2 class="fulu-deliveryreturns-heading">Delivery</h2>
-          <p><strong>Do you ship internationally?</strong><br>
-          Yes, we offer worldwide shipping. Costs are determined by the destination, as well as the size and weight of the item. For particularly delicate or oversized pieces, white-glove delivery services are available upon request.</p>
+        <div class="fulu-faq-list">
           
-          <p><strong>How long will delivery take?</strong><br>
-          Delivery times depend on your location and any customization or reupholstery requirements.<br><br>
-          <em>In-stock items:</em> generally dispatched within 14 working days of confirmation.<br>
-          <em>Bespoke items:</em> shipping timelines provided upon order confirmation.<br><br>
-          You will receive a tracking number or a personal update as soon as your order is on its way.</p>
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">Do you ship internationally?</p>
+            <p class="fulu-faq-answer">Yes, we offer worldwide shipping. Shipping costs and delivery times vary depending on your location and the size of the item. All details will be provided during the checkout process or by contacting us directly.</p>
+          </div>
 
-          <p><strong>Is local pickup available?</strong><br>
-          Yes. If you are located in or near Berlin, Germany, you are welcome to schedule a pickup from our gallery. Please contact us to arrange a convenient time.</p>
-        </div>
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">What defines the condition of your items?</p>
+            <p class="fulu-faq-answer">Our collection includes both handmade contemporary works and curated vintage objects. While signs of age and patina are part of the charm of vintage pieces, we ensure all items meet our standards of quality and authenticity. Any notable imperfections are mentioned in the product description.</p>
+          </div>
 
-        <div class="fulu-deliveryreturns-section">
-          <h2 class="fulu-deliveryreturns-heading">Returns</h2>
-          <p>Given the unique nature of our vintage and made-to-order items, all sales are final.</p>
-          <p>We advise reviewing product details thoroughly prior to purchase. If you need further photos, measurements, or material samples, please do not hesitate to ask—we are here to help you make an informed choice.</p>
-          
-          <p><strong>What if my item arrives damaged?</strong><br>
-          In the rare event that your item arrives damaged, please notify us within 3 days of delivery at <a href="mailto:contact@szene.club">contact@szene.club</a>, attaching clear photos of both the damage and the packaging. Our team will review your request and respond within 10 working days to resolve the matter.</p>
-        </div>
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">Can I return or exchange an item?</p>
+            <p class="fulu-faq-answer">Due to the unique nature of our vintage and made-to-order pieces, all sales are final. If your item arrives damaged or there is an issue with your order, please contact us within 3 days of delivery, and we’ll do our best to resolve the situation.</p>
+          </div>
 
-        <div class="fulu-deliveryreturns-section">
-          <h2 class="fulu-deliveryreturns-heading">Questions?</h2>
-          <p>For specific shipping requirements or further information regarding delivery and returns, please feel free to contact us. We are always here to assist you at <a href="mailto:contact@szene.club">contact@szene.club</a>.</p>
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">Do you offer customization or bespoke commissions?</p>
+            <p class="fulu-faq-answer">Yes. As a design agency, we provide bespoke customization services for many of our pieces. We’re happy to discuss materials, finishes, and specific requirements to help guide your choice. Contact us to discuss your specific needs.</p>
+          </div>
+
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">Can I view a piece in person before purchasing?</p>
+            <p class="fulu-faq-answer">We offer in-person viewings by appointment at our studio in Berlin. Please reach out to us to schedule a visit — we’re always happy to welcome clients to our space.</p>
+          </div>
+
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">I’m looking for a specific piece — can you help me find it?</p>
+            <p class="fulu-faq-answer">Absolutely. We offer a tailored sourcing service for clients looking for particular items not currently listed in our collection. Share your request with us at <a href="mailto:contact@szene.club">contact@szene.club</a>, and our team will begin the search.</p>
+          </div>
+
+          <div class="fulu-faq-item">
+            <p class="fulu-faq-question">How can I stay updated on new arrivals and events?</p>
+            <p class="fulu-faq-answer">You can subscribe to our newsletter or follow us on Instagram at <a href="https://www.instagram.com/szeneclub/" target="_blank">@szeneclub</a> to stay informed about new pieces, collaborations, and events.</p>
+          </div>
+
         </div>
       </div>
       {% section 'footer' %}
@@ -57,7 +67,7 @@
     min-width: 500px;
   }
 
-  .fulu-page-deliveryreturns-container {
+  .fulu-page-faq-container {
     display: grid;
     min-height: 100%;
     width: 100%;
@@ -70,7 +80,7 @@
     flex-direction: column;
   }
 
-  .fulu-page-deliveryreturns {
+  .fulu-page-faq {
     display: flex;
     flex-direction: column;
     align-self: center;
@@ -81,7 +91,34 @@
     margin-right: 13.8%;
   }
 
-  .fulu-deliveryreturns-title {
+  .fulu-faq-title {
     font-size: 2.75rem;
+    margin-bottom: 40px;
+  }
+
+  .fulu-faq-intro {
+    margin-bottom: 60px;
+  }
+
+  .fulu-faq-item {
+    margin-bottom: 40px;
+  }
+
+  .fulu-faq-question {
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+
+  .fulu-faq-answer {
+    line-height: 1.5;
+  }
+  
+  .fulu-faq-answer a, .fulu-faq-intro a {
+      color: black;
+      text-decoration: underline;
+      text-underline-offset: 4px;
   }
 </style>
