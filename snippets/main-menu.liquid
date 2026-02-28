@@ -154,6 +154,7 @@
         border: none;
         outline: none;
         cursor: pointer;
+        pointer-events: auto;
     }
 
     .icon-plus-minus {
@@ -161,6 +162,8 @@
         transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
         pointer-events: auto;
         cursor: pointer;
+        width: 100%;
+        height: 100%;
     }
 
     .icon-plus-minus line {
@@ -180,5 +183,14 @@
 
     .main-menu-wrapper.menu-open .line-v {
         transform: scaleY(0);
+    }
+
+    @media screen and (max-width: 768px) {
+        .main-menu-button-wrapper {
+            width: 125px;
+            height: 125px;
+            top: 40px;
+            right: 35px;
+        }
     }
 </style>

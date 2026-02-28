@@ -1,0 +1,143 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="canonical" href="{{ canonical_url }}">
+        <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+        <title>
+            {{ page_title }}
+            {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+            {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+            {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+        </title>
+
+        {% if page_description %}
+            <meta name="description" content="{{ page_description | escape }}">
+        {% endif %}
+
+<style>
+    @font-face {
+        font-family: "Inter";
+        src: url('https://cdn.shopify.com/s/files/1/1043/1584/6995/files/Inter.ttf?v=1771807709') format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+    @font-face {
+        font-family: "Unbounded";
+        src: url('https://cdn.shopify.com/s/files/1/1043/1584/6995/files/Unbounded.ttf?v=1771809449') format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    html {
+        overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    html, body{
+        overflow-x: hidden;
+    }
+
+    body {
+        overscroll-behavior: none;
+        min-height: 700px;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9; /* Soft off-white to match the minimalist vibe */
+        font-family: "Inter";
+        color: #000;
+        width: 100%;
+    }
+
+    #fulu-page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f9f9f9;
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .fulu-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #000;
+        animation: fulu-spin 0.8s ease-in-out infinite;
+    }
+
+    @keyframes fulu-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    #fulu-main-content {
+        opacity: 0;
+        transition: opacity 0.8s ease-out;
+    }
+
+    .visually-hidden {
+        position: absolute !important;
+        overflow: hidden;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        word-wrap: normal !important;
+    }
+        </style>
+        <link rel="stylesheet" href="https://use.typekit.net/fod3net.css">
+        {{ content_for_header }}    
+    </head>
+
+    <body>
+        {% render 'main-menu' %}
+        <a class="skip-to-content-link visually-hidden" href="#fulu-main-content">Skip to content</a>
+        <div id="fulu-page-loader">
+            <div class="fulu-spinner"></div>
+        </div>
+        <main id="fulu-main-content" role="main">
+            {{ content_for_layout }}            
+        </main>
+
+        
+    </body>
+</html>
+
+<script>
+    const loadPromise = new Promise(resolve => {
+        if (document.readyState === 'complete') {
+            resolve();
+        } else {
+            window.addEventListener('load', resolve);
+        }
+    });
+
+    const fontPromise = document.fonts ? document.fonts.ready : Promise.resolve();
+
+    Promise.all([loadPromise, fontPromise]).then(() => {
+        const loader = document.getElementById('fulu-page-loader');
+        const content = document.getElementById('fulu-main-content');
+        
+        if (loader && content) {
+            loader.style.opacity = '0';
+            content.style.opacity = '1';
+            
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    });
+</script>
