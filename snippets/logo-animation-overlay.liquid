@@ -80,6 +80,7 @@
         .fulu-logo-animation-ceil {
             width: 21svw;
             align-items: flex-start;
+            margin-left: 35px;
         }
 
         .fulu-logo-animation-letter {
@@ -103,6 +104,7 @@
 
     @media screen and (max-width: 500px) and (orientation: portrait) {
 
+
         #fulu-animation-cell-1 {
             transform: rotate(90deg);
             margin-top: 30px;
@@ -118,6 +120,16 @@
 
         #fulu-animation-letter-2, #fulu-animation-letter-3 {
             line-height: .7;
+        }
+    }
+
+    @media screen and (max-height: 500px) {
+        .fulu-logo-animation-letter { 
+            line-height: .75 !important;
+        }
+
+        .fulu-logo-animation-letter {
+            font-size: 10svh;
         }
     }
 </style>
