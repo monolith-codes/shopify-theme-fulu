@@ -6,6 +6,10 @@
         overflow-y: auto;
                 min-width: 500px;
     }
+
+    .fulu-home-container {
+        background-color: white;
+    }
 </style>
 
 {% render 'logo-animation-overlay' %}
@@ -13,3 +17,40 @@
 <div class="fulu-home-container" itemscope itemtype="http://schema.org/IndexPage">
     {% render 'grid-layout-index' %}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.querySelector('.fulu-home-container');
+        if (!container) return;
+
+        const handleScroll = () => {
+            let scrollTop = container.scrollTop;
+            let maxScroll = container.scrollHeight - container.clientHeight;
+
+            if (maxScroll <= 0) {
+                scrollTop = window.scrollY || document.documentElement.scrollTop;
+                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            }
+
+            const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+            if (scrollPercentage >= 0.8) {
+                const progress = Math.min((scrollPercentage - 0.8) / 0.2, 1);
+                // Interpolate from White (255, 255, 255) to rgb(50, 168, 119)
+                const r = Math.round(255 - (205 * progress));
+                const g = Math.round(255 - (87 * progress));
+                const b = Math.round(255 - (136 * progress));
+                container.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            } else {
+                container.style.backgroundColor = 'white';
+            }
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll);
+        
+        handleScroll();
+        window.addEventListener('load', handleScroll);
+    });
+</script>
