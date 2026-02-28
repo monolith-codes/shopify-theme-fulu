@@ -1,26 +1,26 @@
 <style>
-    .fulu-home-container {
+    .fulu-content-container {
         height: 100vh;
         width: 100%;
         background-color: white;
         overflow-y: auto;
-                min-width: 500px;
+        min-width: 500px;
     }
 
-    .fulu-home-container {
+    .fulu-content-container {
         background-color: white;
     }
 </style>
 
 {% render 'logo-animation-overlay' %}
 
-<div class="fulu-home-container" itemscope itemtype="http://schema.org/IndexPage">
+<div class="fulu-content-container" itemscope itemtype="http://schema.org/IndexPage">
     {% render 'grid-layout-index' %}
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const container = document.querySelector('.fulu-home-container');
+        const container = document.querySelector('.fulu-content-container');
         if (!container) return;
 
         const handleScroll = () => {
