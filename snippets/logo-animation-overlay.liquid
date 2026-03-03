@@ -73,7 +73,7 @@
             // Calculate and clamp fraction between 0 and 1 cleanly
             const scrollFraction = maxScroll > 0 
                 ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 
-                : 0;
+                : 1;
 
             const currentY = startY + (endY - startY) * scrollFraction;
             const currentX = startX - (distanceX * scrollFraction);
