@@ -29,7 +29,6 @@
             </svg>
         </button>
     </div>
-
 </div>
 
 <script>
@@ -90,7 +89,6 @@
         align-items: center;
         justify-content: center;
         pointer-events: auto;
-
     }
 
     .main-menu-wrapper.menu-open .main-menu-overlay {
@@ -199,6 +197,16 @@
 
     .main-menu-wrapper.menu-open .line-v {
         transform: scaleY(0);
+    }
+
+    
+    @media screen and (max-width: 1200px) {
+        .main-menu-button-wrapper {
+            width: 15svw;
+            height: 15svw;
+            top: 40px;
+            right: 35px;
+        }
     }
 
     @media screen and (max-width: 768px) {
