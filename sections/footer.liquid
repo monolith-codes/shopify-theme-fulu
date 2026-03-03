@@ -25,6 +25,7 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
+        white-space: nowrap;
     }
 
     .fulu-footer-content a {
@@ -163,6 +164,66 @@
             height: unset;
             margin-bottom: 35px;
         }
+        
+        .fulu-footer-container {
+            margin-bottom: 12svh;
+        }
+    }
+
+    @media screen and (max-width: 600px) and (orientation: portrait) {
+
+        .fulu-footer-spacer {
+            width: calc(30% + 35px);
+        }
+
+        .fulu-footer-content-container {
+            width: calc(70% - 35px);
+        }
+
+        .fulu-footer-nav-link {
+            font-size: 1rem !important;
+        }
+
+        .fulu-footer-socials {
+            font-size: 1rem !important;
+        }
+
+        .fulu-footer-copyrights {
+            font-size: 1rem !important;
+        }
+
+        #footer-copyright-normal-small {
+            font-size: .9rem !important;
+        }
+    }
+
+
+    @media screen and (max-width: 350px) and (orientation: portrait) {
+        .fulu-footer-spacer {
+            width: calc(20% + 35px);
+        }
+
+        .fulu-footer-content-container {
+            width: calc(80% - 35px);
+        }
+    }
+
+    @media screen and (max-width: 300px) and (orientation: portrait) {
+        .fulu-footer-nav-link {
+            font-size: .8rem !important;
+        }
+
+        .fulu-footer-socials {
+            font-size: .8rem !important;
+        }
+
+        .fulu-footer-copyrights {
+            font-size: .8rem !important;
+        }
+
+        #footer-copyright-normal-small {
+            font-size: .7rem !important;
+        }
     }
 </style>
 
@@ -172,14 +233,14 @@
         <div class="fulu-footer-content">
             <div class="fulu-footer-nav-bar">
                 <div class="fulu-footer-content-box">
-                    <a class="fulu-footer-nav-link" href="/pages/faq" rel="noopener noreferrer">FAQ</a>
+                    <a class="fulu-footer-nav-link" href="/pages/faq" rel="noopener noreferrer">Apply</a>
                 </div>
                 <div class="fulu-footer-content-box">
                     <a class="fulu-footer-nav-link" href="/pages/terms" rel="noopener noreferrer">Terms & Conditions</a>
                 </div>
-                <div class="fulu-footer-content-box">
+                {% comment %} <div class="fulu-footer-content-box">
                     <a class="fulu-footer-nav-link" href="/pages/deliveryreturns" rel="noopener noreferrer">Delivery & Returns</a>
-                </div>
+                </div> {% endcomment %}
                 <div class="fulu-footer-content-box">
                     <a class="fulu-footer-socials" href="https://www.instagram.com/szeneclub/" target="_blank" rel="noopener noreferrer">@szeneclub</a>
                 </div>

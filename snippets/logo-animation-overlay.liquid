@@ -1,10 +1,123 @@
+<div class="fulu-logo-animation-container">
+    <div class="fulu-logo-animation-ceil">
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-1">
+            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-1">SZ</div>
+        </div>
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-2">
+            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-2">E</div>
+        </div>
+    </div>
+
+    <div class="fulu-logo-animation-row">
+        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-3">
+            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-3">NE</div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollContainer = document.querySelector('.fulu-content-container');
+        const cell1 = document.getElementById('fulu-animation-cell-1');
+        const cell2 = document.getElementById('fulu-animation-cell-2');
+        const cell3 = document.getElementById('fulu-animation-cell-3');
+
+        // Bail out early if any required element is missing
+        if (!scrollContainer || !cell1 || !cell2 || !cell3) return;
+
+        let ticking = false;
+        let maxScroll = 0;
+        let isWindowScroll = false;
+        let startY = 0;
+        let startX = 0;
+        let endY = 0;
+        let distanceX = 0;
+        let offsetX = 0;
+
+        function calculateDimensions() {
+            // Reset transforms to ensure clean measurements
+            cell1.style.transform = '';
+            cell3.style.transform = '';
+
+            maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            
+            if (maxScroll <= 0) {
+                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                isWindowScroll = true;
+            } else {
+                isWindowScroll = false;
+            }
+            
+            maxScroll = Math.max(0, maxScroll);
+            
+            const rect1 = cell1.getBoundingClientRect();
+            const rect2 = cell2.getBoundingClientRect();
+            const rect3 = cell3.getBoundingClientRect();
+
+            // Calculate offsets
+            offsetX = (cell1.offsetWidth - cell1.offsetHeight) / 2;
+
+            startY = offsetX;
+            startX = 0;
+
+            // Calculate target position (touching cell2) accounting for 90deg rotation
+            endY = cell2.offsetTop - cell1.offsetTop - (cell1.offsetWidth + cell1.offsetHeight) / 2;
+            
+            distanceX = rect3.left - rect2.right;
+        }
+
+        function updatePosition() {
+            const scrollTop = isWindowScroll ? (window.scrollY || document.documentElement.scrollTop) : scrollContainer.scrollTop;
+            
+            // Calculate and clamp fraction between 0 and 1 cleanly
+            const scrollFraction = maxScroll > 0 
+                ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 
+                : 0;
+
+            const currentY = startY + (endY - startY) * scrollFraction;
+            const currentX = startX - (distanceX * scrollFraction);
+
+            cell1.style.transform = `translateY(${currentY}px) translateX(${-offsetX}px) rotate(90deg)`;
+            cell3.style.transform = `translateX(${currentX}px)`;
+        }
+
+        const onScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updatePosition();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        scrollContainer.addEventListener('scroll', onScroll);
+        window.addEventListener('scroll', onScroll);
+        
+        window.addEventListener('resize', () => {
+            calculateDimensions();
+            updatePosition();
+        });
+
+        window.addEventListener('load', () => {
+            calculateDimensions();
+            updatePosition();
+        });
+
+        // Initialize dimensions and trigger first render
+        calculateDimensions();
+        updatePosition();
+    });
+</script>
+
 <style>
     .fulu-logo-animation-container {
-        overflow: none !important;
+        overflow: hidden !important;
         display: flex;
         height: 100svh;
         width: 100%;
-        position: absolute;
+        position: fixed;
         z-index: 1;
         pointer-events: none;
         z-index: 4000;
@@ -74,9 +187,7 @@
         margin-bottom: 55px;
     }
 
-
-
-    @media screen and (max-width: 768px), screen and (orientation: portrait) {
+    @media screen and (max-width: 768px) and (orientation: portrait) {
         .fulu-logo-animation-ceil {
             width: 21svw;
             align-items: flex-start;
@@ -96,10 +207,6 @@
         #fulu-animation-letter-1 {
             line-height: 0.79;
         }
-
-
-
-
     }
 
     @media screen and (max-width: 500px) and (orientation: portrait) {
@@ -132,104 +239,25 @@
             font-size: 10svh;
         }
     }
+
+    @media screen and (max-width: 500px) and (orientation: portrait){
+        .fulu-logo-animation-letter { 
+            line-height: .75 !important;
+        }
+
+        .fulu-logo-animation-letter {
+            font-size: 8.5svh;
+        }
+    }
+
+
+    @media screen and (max-width: 350px) and (orientation: portrait){
+        .fulu-logo-animation-letter { 
+            line-height: .75 !important;
+        }
+
+        .fulu-logo-animation-letter {
+            font-size: 6.5svh;
+        }
+    }
 </style>
-
-<div class="fulu-logo-animation-container">
-    <div class="fulu-logo-animation-ceil">
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-1">
-            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-1">SZ</div>
-        </div>
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-2">
-            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-2">E</div>
-        </div>
-    </div>
-
-    <div class="fulu-logo-animation-row">
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-3">
-            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-3">NE</div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const scrollContainer = document.querySelector('.fulu-content-container');
-        const cell1 = document.getElementById('fulu-animation-cell-1');
-        const cell2 = document.getElementById('fulu-animation-cell-2');
-        const cell3 = document.getElementById('fulu-animation-cell-3');
-
-        // Bail out early if any required element is missing
-        if (!scrollContainer || !cell1 || !cell2 || !cell3) return;
-
-        let ticking = false;
-        let maxScroll = 0;
-        let startY = 0;
-        let startX = 0;
-        let endY = 0;
-        let distanceX = 0;
-        let offsetX = 0;
-
-        function calculateDimensions() {
-            // Reset transforms to ensure clean measurements
-            cell1.style.transform = '';
-            cell3.style.transform = '';
-
-            maxScroll = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
-            
-            const rect1 = cell1.getBoundingClientRect();
-            const rect2 = cell2.getBoundingClientRect();
-            const rect3 = cell3.getBoundingClientRect();
-
-            // Calculate offsets
-            offsetX = (cell1.offsetWidth - cell1.offsetHeight) / 2;
-
-            startY = offsetX;
-            startX = 0;
-
-            // Calculate target position (touching cell2) accounting for 90deg rotation
-            endY = cell2.offsetTop - cell1.offsetTop - (cell1.offsetWidth + cell1.offsetHeight) / 2;
-            
-            distanceX = rect3.left - rect2.right;
-        }
-
-        function updatePosition() {
-            const scrollTop = scrollContainer.scrollTop;
-            
-            // Calculate and clamp fraction between 0 and 1 cleanly
-            const scrollFraction = maxScroll > 0 
-                ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 
-                : 0;
-
-            const currentY = startY + (endY - startY) * scrollFraction;
-            const currentX = startX - (distanceX * scrollFraction);
-
-            cell1.style.transform = `translateY(${currentY}px) translateX(${-offsetX}px) rotate(90deg)`;
-            cell3.style.transform = `translateX(${currentX}px)`;
-        }
-
-        scrollContainer.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    updatePosition();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        
-        window.addEventListener('resize', () => {
-            calculateDimensions();
-            updatePosition();
-        });
-
-        window.addEventListener('load', () => {
-            calculateDimensions();
-            updatePosition();
-        });
-
-        // Initialize dimensions and trigger first render
-        calculateDimensions();
-        updatePosition();
-    });
-</script>

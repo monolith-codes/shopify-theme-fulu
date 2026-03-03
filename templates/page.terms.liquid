@@ -87,7 +87,9 @@
           <p>These Terms are governed by the laws of Germany. Any disputes shall be resolved exclusively in the courts of Berlin, Germany.</p>
         </div>
       </div>
-      {% section 'footer' %}
+
+    {% section 'footer' %}
+        </div>
   </div>
 </div>
 
@@ -95,11 +97,11 @@
 
 <style>
   .fulu-content-container {
-    height: 100vh;
     width: 100%;
-    background-color: white;
+    height: 100%;
     overflow-y: auto;
-    min-width: 500px;
+    margin: 0;
+    padding: 0;
   }
 
   .fulu-page-terms-container {
@@ -113,6 +115,7 @@
   .fulu-page-content {
     display: flex;
     flex-direction: column;
+    margin-top: 25svh;
   }
 
   .fulu-page-terms {
@@ -129,5 +132,22 @@
 
   .fulu-terms-title {
     font-size: 2.75rem;
+  }
+
+  @media screen and (max-width: 600px) {
+    .fulu-page-terms-container { 
+      grid-template-columns: 1fr;
+    }
+
+    .fulu-terms-title {
+      font-size: 2.0rem;
+    }
+
+
+    .fulu-page-terms {
+      width: 70%;
+      margin: 0;
+      padding: 0;
+    }
   }
 </style>

@@ -1,8 +1,47 @@
+<div class="fulu-home-grid">
+    <div class="fulu-home-grid-spacer"></div>
+    <div class="fulu-home-grid-container">
+        <div class="fulu-home-grid-content">
+            <div class="fulu-home-grid-item i-1">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs13.webp?v=1772084153" alt="Designer 1" fetchpriority="high" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 1</div>
+            </div>
+            <div class="fulu-home-grid-item i-2">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs5.webp?v=1771883612" alt="Designer 2" fetchpriority="high" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 2</div>
+            </div>
+            <div class="fulu-home-grid-item i-3">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs6.webp?v=1771884770" alt="Designer 3" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 3</div>
+            </div>
+            <div class="fulu-home-grid-item i-4">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs11.webp?v=1772067801" alt="Designer 4" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 4</div>
+            </div>
+            <div class="fulu-home-grid-item i-5">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs2.webp?v=1771880941" alt="Designer 5" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 5</div>
+            </div>
+            <div class="fulu-home-grid-item i-6">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs7.webp?v=1772059811" alt="Designer 6" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 6</div>
+            </div>
+            <div class="fulu-home-grid-item i-7">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs10.webp?v=1772061271" alt="Designer 7" width="800" height="1200"/>
+                <div class="fulu-designer-info">Designer 7</div>
+            </div>
+            <div class="fulu-home-grid-item i-8">
+                <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs12.webp?v=1772071801" alt="About Us" width="800" height="1200"/>
+                <div class="fulu-designer-info">About Us</div>
+            </div>
+        </div>
+        {% section 'footer' %}
+    </div>
+</div>
+
 <style>
     .fulu-home-grid {
         display: grid;
-        min-height: 100%;
-        overflow: none !important;
         width: 100svw;
         grid-template-columns: 1fr 6.2fr;
         margin: 0;
@@ -161,8 +200,8 @@
 
     @media screen and (max-width: 500px) and (orientation: portrait) {
         .fulu-home-grid-content {
-            margin-top: 15.4rem;
-            margin-bottom: 35px;
+            margin-top: 15.75rem;
+            margin-bottom: 10svh;
         }
 
         .fulu-home-grid-container {
@@ -171,46 +210,10 @@
 
     }
 
+    @media screen and (max-width: 350px) and (orientation: portrait){
+        .fulu-home-grid-content {
+            margin-top: 12.75rem;
+            margin-bottom: 7svh;
+        }
+    }
 </style>
-
-<div class="fulu-home-grid">
-        <div class="fulu-home-grid-spacer"></div>
-        <div class="fulu-home-grid-container">
-            <div class="fulu-home-grid-content">
-                <div class="fulu-home-grid-item i-1">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs13.webp?v=1772084153" alt="Designer 1" fetchpriority="high" />
-                    <div class="fulu-designer-info">Designer 1</div>
-                </div>
-                <div class="fulu-home-grid-item i-2">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs5.webp?v=1771883612" alt="Designer 2" fetchpriority="high" />
-                    <div class="fulu-designer-info">Designer 2</div>
-                </div>
-                <div class="fulu-home-grid-item i-3">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs6.webp?v=1771884770" alt="Designer 3" />
-                    <div class="fulu-designer-info">Designer 3</div>
-                </div>
-                <div class="fulu-home-grid-item i-4">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs11.webp?v=1772067801" alt="Designer 4" />
-                    <div class="fulu-designer-info">Designer 4</div>
-                </div>
-                <div class="fulu-home-grid-item i-5">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs2.webp?v=1771880941" alt="Designer 5" />
-                    <div class="fulu-designer-info">Designer 5</div>
-                </div>
-                <div class="fulu-home-grid-item i-6">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs7.webp?v=1772059811" alt="Designer 6" />
-                    <div class="fulu-designer-info">Designer 6</div>
-                </div>
-                <div class="fulu-home-grid-item i-7">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs10.webp?v=1772061271" alt="Designer 7" />
-                    <div class="fulu-designer-info">Designer 7</div>
-                </div>
-                <div class="fulu-home-grid-item i-8">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs12.webp?v=1772071801" alt="About Us" />
-                    <div class="fulu-designer-info">About Us</div>
-                </div>
-            </div>
-            {% section 'footer' %}
-        </div>
-    </div>
-</div>
