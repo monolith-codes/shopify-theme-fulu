@@ -4,7 +4,7 @@
         <div class="fulu-home-grid-content">
             <div class="fulu-home-grid-item i-1">
                 <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs13.webp?v=1772084153" alt="Designer 1" fetchpriority="high" width="800" height="1200"/>
-                <div class="fulu-designer-info">Designer 1</div>
+                <div class="fulu-designer-info"><a>Designer 1</a></div>
             </div>
             <div class="fulu-home-grid-item i-2">
                 <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs5.webp?v=1771883612" alt="Designer 2" fetchpriority="high" width="800" height="1200"/>
@@ -43,9 +43,11 @@
     .fulu-home-grid {
         display: grid;
         width: 100svw;
+        z-index: 3;
         grid-template-columns: 1fr 6.2fr;
         margin: 0;
-        padding: 0;        
+        padding: 0;
+        position: relative;
     }
 
     .fulu-home-grid-spacer {
@@ -67,6 +69,8 @@
         align-content: start;
         grid-auto-flow: dense;
         gap: 30px;
+                z-index: 1;
+
     }
 
     .fulu-home-grid-item {
@@ -94,8 +98,8 @@
         background-color: grey;
         opacity: 0;
         transition: opacity 0.3s ease;
-        pointer-events: none;
         z-index: 1;
+
     }
 
     .fulu-home-grid-item:hover::after {
@@ -113,8 +117,11 @@
         font-weight: bold;
         text-align: left;
         width: auto;
-        pointer-events: none;
-        z-index: 2;
+        z-index: 4;
+    }
+
+    .fulu-designer-info {
+        z-index: 1;
     }
 
     .fulu-home-grid-item:hover .fulu-designer-info {

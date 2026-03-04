@@ -1,5 +1,6 @@
 {% render 'logo-animation-overlay' %}
 
+
 <div class="fulu-content-container">
     <div class="fulu-page-apply-container">
         <div class="fulu-apply-spacer"></div>
@@ -74,10 +75,11 @@
 
 <style>
     .fulu-content-container {
-        height: 100vh;
+        height: 100%;
         width: 100%;
-        overflow-y: auto;
-        background-color: #fff;
+        z-index: 3;
+        pointer-events: all !important;
+        background-color: white;
     }
     
 
@@ -86,6 +88,7 @@
         width: 100%;
         height: 100%;
         grid-template-columns: 1fr 6.2fr;
+        z-index: 200;
     }
 
     .fulu-apply-spacer {
@@ -105,6 +108,7 @@
         width: 65%;
         position: relative;
         right: 2%;
+        z-index: 2;
     }
 
     .fulu-apply-title {
@@ -178,6 +182,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         margin-top: 20px;
+        margin-bottom: 5svh;
         border-radius: 20px;
     }
 
