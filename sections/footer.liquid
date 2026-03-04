@@ -1,0 +1,263 @@
+<div class ="fulu-footer-container">
+    <div class="fulu-footer-spacer"></div>
+    <div class="fulu-footer-content-container">
+        <div class="fulu-footer-content">
+            <div class="fulu-footer-nav-bar">
+                <div class="fulu-footer-content-box">
+                    <a class="fulu-footer-nav-link" href="/pages/apply" rel="noopener noreferrer">Apply</a>
+                </div>
+                <div class="fulu-footer-content-box">
+                    <a class="fulu-footer-nav-link" href="/pages/terms" rel="noopener noreferrer">Terms & Conditions</a>
+                </div>
+                {% comment %} <div class="fulu-footer-content-box">
+                    <a class="fulu-footer-nav-link" href="/pages/deliveryreturns" rel="noopener noreferrer">Delivery & Returns</a>
+                </div> {% endcomment %}
+                <div class="fulu-footer-content-box">
+                    <a class="fulu-footer-socials" href="https://www.instagram.com/szeneclub/" target="_blank" rel="noopener noreferrer">@szeneclub</a>
+                </div>
+            </div>
+
+            <div class="fulu-footer-copyrights-box">
+                <div class="fulu-footer-copyrights">
+                    <div class="fulu-copyright-row">
+                        <p class="footer-text" id="footer-copyright-bold">SZENE CLUB</p>
+                        <p class="footer-text" id="footer-copyright-normal">2026</p>
+                    </div>
+                    <p class="footer-text" id="footer-copyright-normal-small">All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fulu-footer-container {
+        display: flex;
+        height: 15svw;
+        width: 100%;
+        z-index: 9000 !important;
+        pointer-events: pointer !important;
+        overflow: hidden;
+    }
+
+    .fulu-footer-spacer {
+        width: calc(33% + 35px);
+    }
+
+    .fulu-footer-content-container {
+        display: flex;
+        align-items: flex-end;
+        width: calc(67% - 35px);
+        height: unset;
+        margin-bottom: 35px;
+    }
+
+    .fulu-footer-content {
+        color: black;
+        font-family: "Inter";
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .fulu-footer-content a {
+        color: black;
+        text-decoration: none !important;
+        font-size: 1.2rem;
+        font-style: normal;
+                z-index: 500;
+        pointer-events: pointer !important;
+    }
+
+    .fulu-footer-copyrights-box {
+        margin-right: 55px;
+        width: unset;
+    }
+
+    .fulu-footer-nav-bar {
+        margin-left: 5svw;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .fulu-footer-copyrights {
+        font-family: "Inter";
+        font-size: 1.2rem;
+        font-style: normal;
+    }
+
+    .fulu-copyright-row {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .fulu-footer-copyrights p {
+        margin: 0;
+    }
+
+    .fulu-footer-socials {
+        font-weight: 600;
+        position: relative;
+    }
+
+    #footer-copyright-normal {
+        font-weight: 400;
+    }
+
+    #footer-copyright-normal-small {
+        font-weight: 400;
+        font-size: 1rem;
+    }
+
+    #footer-copyright-bold {
+        font-family: "Inter";
+        font-weight: 600;
+    }
+
+    .fulu-footer-nav-link {
+        position: relative;
+    }
+
+    .fulu-footer-nav-link::after,
+    .fulu-footer-socials::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 3px;
+        background-color: black; 
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .fulu-footer-nav-link:hover::after,
+    .fulu-footer-socials:hover::after {
+        transform: scaleX(1);
+    }
+
+    .fulu-footer-content-box {
+        margin-right: 35px;
+    }
+
+    @media screen and (max-width: 1700px)  { 
+        .fulu-footer-content {
+            flex-direction: column;
+        }
+        .fulu-footer-copyrights-box {
+            width: 100%;
+            margin-left: 5svw;
+            margin-top: 30px;
+        }
+            
+        .fulu-footer-content-box {
+            margin-bottom: 25px;
+        }
+    }
+
+    @media screen and (max-width: 1300px)  { 
+
+        .fulu-footer-content {
+            flex-direction: column;
+        }
+
+        .fulu-footer-copyrights-box {
+            width: 100%;
+            margin-left: 5svw;
+            margin-top: 30px;
+        }
+        
+        .fulu-footer-nav-bar {
+            align-items: flex-start;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .fulu-footer-container {
+            height: unset;
+            padding-top: 35px;
+            padding-bottom: 35px;
+        }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: portrait) {
+        .fulu-footer-nav-bar {
+            flex-wrap: nowrap;
+            flex-direction: column;
+        }
+    
+        .fulu-footer-spacer {
+            width: calc(40% + 35px);
+        }
+
+        .fulu-footer-content-container {
+            display: flex;
+            justify-self: flex-end;
+            width: calc(57% - 35px);
+            height: unset;
+            margin-bottom: 35px;
+        }
+        
+        .fulu-footer-container {
+            margin-bottom: 12svh;
+        }
+    }
+
+    @media screen and (max-width: 600px) and (orientation: portrait) {
+
+        .fulu-footer-spacer {
+            width: calc(30% + 35px);
+        }
+
+        .fulu-footer-content-container {
+            width: calc(70% - 35px);
+        }
+
+        .fulu-footer-nav-link {
+            font-size: 1rem !important;
+        }
+
+        .fulu-footer-socials {
+            font-size: 1rem !important;
+        }
+
+        .fulu-footer-copyrights {
+            font-size: 1rem !important;
+        }
+
+        #footer-copyright-normal-small {
+            font-size: .9rem !important;
+        }
+    }
+
+
+    @media screen and (max-width: 350px) and (orientation: portrait) {
+        .fulu-footer-spacer {
+            width: calc(20% + 35px);
+        }
+
+        .fulu-footer-content-container {
+            width: calc(80% - 35px);
+        }
+    }
+
+    @media screen and (max-width: 300px) and (orientation: portrait) {
+        .fulu-footer-nav-link {
+            font-size: .8rem !important;
+        }
+
+        .fulu-footer-socials {
+            font-size: .8rem !important;
+        }
+
+        .fulu-footer-copyrights {
+            font-size: .8rem !important;
+        }
+
+        #footer-copyright-normal-small {
+            font-size: .7rem !important;
+        }
+    }
+</style>

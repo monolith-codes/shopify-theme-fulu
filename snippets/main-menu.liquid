@@ -1,0 +1,247 @@
+<div class="main-menu-wrapper">
+    <div class="main-menu-overlay">
+        <nav class="main-menu-nav">
+            <ul class="main-menu-list">
+                <li class="main-menu-item"><a href="{{ routes.root_url }}" class="main-menu-link" data-text="Home"><span>Home</span></a></li>
+                <li class="main-menu-item"><a href="{{ routes.root_url }}" class="main-menu-link" data-text="Shop"><span>Shop</span></a></li>
+                <li class="main-menu-item"><a href="/pages/about" class="main-menu-link" data-text="About"><span>About</span></a></li>
+                <li class="main-menu-item"><a href="/pages/apply" class="main-menu-link" data-text="About"><span>Apply</span></a></li>
+                {% comment %} {%- if linklists.main-menu.links.size > 0 -%}
+                    {%- for link in linklists.main-menu.links -%}
+                        <li class="main-menu-item">
+                            <a href="{{ link.url }}" class="main-menu-link" data-text="{{ link.title }}"><span>{{ link.title }}</span></a>
+                        </li>
+                    {%- endfor -%}
+                {%- else -%}
+                    <li class="main-menu-item"><a href="/" class="main-menu-link" data-text="Home"><span>Home</span></a></li>
+                    <li class="main-menu-item"><a href="/collections/all" class="main-menu-link" data-text="Shop"><span>Shop</span></a></li>
+                    <li class="main-menu-item"><a href="/pages/about" class="main-menu-link" data-text="About"><span>About</span></a></li>
+                    <li class="main-menu-item"><a href="/pages/about" class="main-menu-link" data-text="About"><span>Contact</span></a></li>
+                {%- endif -%} {% endcomment %}
+            </ul>
+        </nav>
+    </div>
+    <div class="main-menu-button-wrapper">
+        <button type="button" class="main-menu-button" aria-label="Toggle menu">
+            <svg class="icon-plus-minus" viewBox="0 0 100 100">
+                <line class="line-h" x1="0" y1="50" x2="100" y2="50" />
+                <line class="line-v" x1="50" y1="0" x2="50" y2="100" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.querySelector('.main-menu-wrapper');
+        const button = document.querySelector('.main-menu-button');
+        let closeTimer;
+        
+        const preventDefault = (e) => e.preventDefault();
+
+        if (wrapper && button) {
+            button.addEventListener('click', () => {
+                wrapper.classList.toggle('menu-open');
+                const isExpanded = wrapper.classList.contains('menu-open');
+                button.setAttribute('aria-expanded', isExpanded);
+                
+                if (isExpanded) {
+                    clearTimeout(closeTimer);
+                    document.body.style.overflow = 'hidden';
+                    document.documentElement.style.overflow = 'hidden';
+                    wrapper.addEventListener('touchmove', preventDefault, { passive: false });
+                } else {
+                    closeTimer = setTimeout(() => {
+                        document.body.style.overflow = '';
+                        document.documentElement.style.overflow = '';
+                        wrapper.removeEventListener('touchmove', preventDefault);
+                    }, 600);
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .main-menu-wrapper {
+        position: fixed;
+        overflow: none !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100svh;
+        pointer-events: none;
+        z-index: 7000;
+        overscroll-behavior: none;
+    }
+
+    .main-menu-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f9f9f9;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+    }
+
+    .main-menu-wrapper.menu-open .main-menu-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .main-menu-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    .main-menu-item {
+        margin: 15px 0;
+        overflow: hidden;
+    }
+
+    .main-menu-link {
+        display: inline-block;
+        position: relative;
+        font-family: "Inter", sans-serif;
+        font-size: 3rem;
+        color: #000;
+        text-decoration: none;
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        padding-bottom: 5px;
+    }
+
+    .main-menu-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 5px;
+        background-color: #000;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .main-menu-link:hover::after {
+        transform: scaleX(1);
+    }
+
+    .main-menu-wrapper.menu-open .main-menu-link {
+        transform: translateY(0);
+    }
+
+    .main-menu-wrapper.menu-open .main-menu-item:nth-child(1) .main-menu-link { transition-delay: 0.1s; }
+    .main-menu-wrapper.menu-open .main-menu-item:nth-child(2) .main-menu-link { transition-delay: 0.2s; }
+    .main-menu-wrapper.menu-open .main-menu-item:nth-child(3) .main-menu-link { transition-delay: 0.3s; }
+    .main-menu-wrapper.menu-open .main-menu-item:nth-child(4) .main-menu-link { transition-delay: 0.4s; }
+
+    .main-menu-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 35px;
+        right: 35px;
+        width: 22.5svh;
+        height: 22.5svh;
+    }
+
+    .main-menu-button {
+        width: 100%;
+        height: 100%;
+        z-index: 2001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        pointer-events: auto;
+    }
+
+    .icon-plus-minus {
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        pointer-events: auto;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+
+    .icon-plus-minus line {
+        stroke: #000;
+        stroke-width: 10;
+        stroke-linecap: square;
+    }
+
+    .line-v {
+        transform-origin: center;
+        transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    }
+
+    .main-menu-wrapper.menu-open .icon-plus-minus {
+        transform: rotate(180deg);
+    }
+
+    .main-menu-wrapper.menu-open .line-v {
+        transform: scaleY(0);
+    }
+
+    
+    @media screen and (max-width: 1200px) {
+        .main-menu-button-wrapper {
+            width: 15svw;
+            height: 15svw;
+            top: 40px;
+            right: 35px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .main-menu-button-wrapper {
+            width: 125px;
+            height: 125px;
+            top: 40px;
+            right: 35px;
+        }
+    }
+
+    @media screen and (max-width: 500px) and (orientation: portrait){
+        .main-menu-button-wrapper {
+            width: 110px;
+            height: 110px;
+            top: 35px;
+            right: 30px;
+        }
+    }
+
+    @media screen and (max-height: 500px) and (orientation: landscape){
+        .main-menu-button-wrapper {
+            width: 100px;
+            height: 100px;
+            top: 40px;
+            right: 30px;
+        }
+    }
+
+    @media screen and (max-width: 350px) and (orientation: portrait){
+        .main-menu-button-wrapper {
+            width: 85px;
+            height: 85px;
+            top: 35px;
+            right: 30px;
+        }
+    }
+</style>

@@ -1,0 +1,84 @@
+{% render 'logo-animation-overlay' %}
+
+<div class="fulu-content-container">
+  <div class="fulu-page-deliveryreturns-container">
+    <div class="fulu-page-spacer"></div>
+    <div class="fulu-page-content">
+      <div class="fulu-page-deliveryreturns">
+        <h1 class="fulu-deliveryreturns-title">Delivery & Returns</h1>
+
+        <div class="fulu-deliveryreturns-section">
+          <p>At SZENE CLUB, every order is treated with the utmost care—from the time of purchase until it reaches your home. Please find below essential details concerning our shipping, delivery, and return policies.</p>
+        </div>
+
+        <div class="fulu-deliveryreturns-section">
+          <h2 class="fulu-deliveryreturns-heading">Delivery</h2>
+          <p><strong>Do you ship internationally?</strong><br>
+          Yes, we offer worldwide shipping. Costs are determined by the destination, as well as the size and weight of the item. For particularly delicate or oversized pieces, white-glove delivery services are available upon request.</p>
+          
+          <p><strong>How long will delivery take?</strong><br>
+          Delivery times depend on your location and any customization or reupholstery requirements.<br><br>
+          <em>In-stock items:</em> generally dispatched within 14 working days of confirmation.<br>
+          <em>Bespoke items:</em> shipping timelines provided upon order confirmation.<br><br>
+          You will receive a tracking number or a personal update as soon as your order is on its way.</p>
+
+          <p><strong>Is local pickup available?</strong><br>
+          Yes. If you are located in or near Berlin, Germany, you are welcome to schedule a pickup from our gallery. Please contact us to arrange a convenient time.</p>
+        </div>
+
+        <div class="fulu-deliveryreturns-section">
+          <h2 class="fulu-deliveryreturns-heading">Returns</h2>
+          <p>Given the unique nature of our vintage and made-to-order items, all sales are final.</p>
+          <p>We advise reviewing product details thoroughly prior to purchase. If you need further photos, measurements, or material samples, please do not hesitate to ask—we are here to help you make an informed choice.</p>
+          
+          <p><strong>What if my item arrives damaged?</strong><br>
+          In the rare event that your item arrives damaged, please notify us within 3 days of delivery at <a href="mailto:contact@szene.club">contact@szene.club</a>, attaching clear photos of both the damage and the packaging. Our team will review your request and respond within 10 working days to resolve the matter.</p>
+        </div>
+
+        <div class="fulu-deliveryreturns-section">
+          <h2 class="fulu-deliveryreturns-heading">Questions?</h2>
+          <p>For specific shipping requirements or further information regarding delivery and returns, please feel free to contact us. We are always here to assist you at <a href="mailto:contact@szene.club">contact@szene.club</a>.</p>
+        </div>
+      </div>
+      {% section 'footer' %}
+  </div>
+</div>
+
+
+
+<style>
+  .fulu-content-container {
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+  }
+
+  .fulu-page-deliveryreturns-container {
+    display: grid;
+    min-height: 100%;
+    width: 100%;
+    grid-template-columns: 1fr 6.2fr;
+    margin: 0 auto;
+  }
+
+  .fulu-page-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fulu-page-deliveryreturns {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 50svw;
+    margin-bottom: 10svh;
+    margin-top: 35px;
+    font-family: "Inter";
+    margin-right: 13.8%;
+  }
+
+  .fulu-deliveryreturns-title {
+    font-size: 2.75rem;
+  }
+</style>

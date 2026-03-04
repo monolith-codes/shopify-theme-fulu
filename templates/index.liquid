@@ -1,338 +1,59 @@
+{%- if request.host contains 'szeneclub.com' -%}
+    <script>window.location.replace('/pages/apply');</script>
+{%- endif -%}
+
 <style>
-    .fulu-home-container {
-        height: 100vh;
+    .fulu-content-container {
+        height: 100%;
         width: 100%;
         background-color: white;
-        overflow-y: auto;
-    }
-    .fulu-home-grid {
-        display: grid;
-        min-height: 100%;
-        width: 100%;
-        grid-template-columns: 1fr 4.5fr;
-    }
-
-    .fulu-home-grid-spacer {
-        opacity: 0;
-        background-color: orange;
-    }
-
-    .fulu-home-grid-container {
-        height: 100%;
-        min-height: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .fulu-home-grid-content {
-        margin: 35px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-auto-rows: 7.8svw;
-        align-content: start;
-        grid-auto-flow: dense;
-        gap: 30px;
-    }
-
-    .fulu-home-grid-item {
-        cursor: pointer;
-        background-color: blue;
-        border-radius: 15px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .fulu-home-grid-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        display: block;
-    }
-
-    .fulu-home-grid-item::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: grey;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .fulu-home-grid-item:hover::after {
-        opacity: 0.15;
-    }
-
-    .fulu-designer-info {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        color: #fff;
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: left;
-        width: auto;
-        pointer-events: none;
-        z-index: 2;
-    }
-
-    .fulu-home-grid-item:hover .fulu-designer-info {
-        opacity: 1;
-    }
-
-    .fulu-home-grid-item.i-1 {
-        background-color: pink !important;
-        grid-column-start: 1;
-        grid-column-end: 3;
-        grid-row-start:1;
-        grid-row-end: 5;
-    }
-
-    .fulu-home-grid-item.i-2 {
-        background-color: purple !important;
-        grid-column-start: 3;
-        grid-column-end: 6;
-        grid-row-start:1;
-        grid-row-end: 6;
-   
-    }
-
-
-   .fulu-home-grid-item.i-3 {
-        background-color: pink !important;
-        grid-column-start: 1;
-        grid-column-end: 3;
-        grid-row-start: 5;
-        grid-row-end: 9;
-    }
-
-
-    .fulu-home-grid-item.i-4 {
-        background-color: purple !important;
-        grid-column-start: 3;
-        grid-column-end: 6;
-        grid-row-start:6;
-        grid-row-end: 9;
-    }
-
-    .fulu-home-grid-item.i-5 {
-        background-color: pink !important;
-        grid-column-start: 1;
-        grid-column-end: 4;
-        grid-row-start: 9;
-        grid-row-end: 13;
-    }
-
-    .fulu-home-grid-item.i-6 {
-        background-color: purple !important;
-        grid-column-start: 4;
-        grid-column-end: 6;
-        grid-row-start: 9;
-        grid-row-end: 13;
-    }
-
-    .fulu-home-grid-item.i-7 {
-        background-color: pink !important;
-        grid-column-start: 1;
-        grid-column-end: 3;
-        grid-row-start: 13;
-        grid-row-end: 17;
-    }
-
-    .fulu-home-grid-item.i-8 {
-        background-color: purple !important;
-        grid-column-start: 3;
-        grid-column-end: 6;
-        grid-row-start: 13;
-        grid-row-end: 17;
-    }
-
-    .fulu-home-footer-container {
-        display: flex;
-        height: 15svw;
-        width: 100%;
-        z-index: 100;
-        background-color: red !important;
-        opacity: 0;
-    }
-
-    @media (max-width: 768px) {
-        .fulu-home-grid {
-            grid-template-columns: 1fr;
-        }
-        .fulu-home-grid-spacer {
-            display: none;
-        }
-        .fulu-home-grid-content {
-            grid-template-columns: 1fr;
-            grid-auto-rows: auto;
-            margin: 30px;
-        }
-        .fulu-home-grid-item {
-            grid-column: auto !important;
-            grid-row: auto !important;
-            aspect-ratio: 1 / 1.25;
-        }
-        .fulu-designer-info {
-            opacity: 1;
-        }
-    }
-
-    .fulu-logo-animation-container {
-        display: flex;
-        height: 100svh;
-        width: 100%;
-        overflow-y: auto;
-        position: absolute;
-        z-index: 1;
-        opacity: 80%;
-        pointer-events: none;
-    }
-    
-    .fulu-logo-animation-ceil {
-        width: 15svw;
-        height: 100%;
-        z-index: 1000 !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        pointer-events: none;
-    }
-
-    .fulu-logo-animation-row {
-        display: flex;
-        justify-content: flex-end;
-        width: 85svw;
-        height: 15svw;
-        z-index: 1000 !important;
-        align-self: end;
-        pointer-events: none;
-    }
-
-    .fulu-logo-animation-cell {
-        width: 15svw;
-        height: 15svw;
-        z-index: 1000 !important;
-        background-color: orange;
-        pointer-events: none;
     }
 </style>
 
-<div class="fulu-logo-animation-container">
-    <div class="fulu-logo-animation-ceil">
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-1"></div>
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-2"></div>
-    </div>
+{% render 'logo-animation-overlay' %}
 
-    <div class="fulu-logo-animation-row">
-        <div class="fulu-logo-animation-cell" id="fulu-animation-cell-3"></div>
-    </div>
+<div class="fulu-content-container" itemscope itemtype="http://schema.org/IndexPage">
+    {% render 'grid-layout-index' %}
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const scrollContainer = document.querySelector('.fulu-home-container');
-        const cell1 = document.getElementById('fulu-animation-cell-1');
-        const cell2 = document.getElementById('fulu-animation-cell-2');
-        const cell3 = document.getElementById('fulu-animation-cell-3');
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.querySelector('.fulu-content-container');
+        if (!container) return;
 
-        // Bail out early if any required element is missing
-        if (!scrollContainer || !cell1 || !cell2 || !cell3) return;
+        const handleScroll = () => {
+            let scrollTop = container.scrollTop;
+            let maxScroll = container.scrollHeight - container.clientHeight;
 
-        let ticking = false;
-        let maxScroll = 0;
-        let distanceY = 0;
-        let distanceX = 0;
-
-        function calculateDimensions() {
-            maxScroll = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
-            distanceY = cell2.offsetTop - cell1.offsetTop - cell1.offsetHeight;
-            distanceX = cell3.offsetLeft - (cell2.offsetLeft + cell2.offsetWidth);
-        }
-
-        function updatePosition() {
-            const scrollTop = scrollContainer.scrollTop;
-            
-            // Calculate and clamp fraction between 0 and 1 cleanly
-            const scrollFraction = maxScroll > 0 
-                ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 
-                : 0;
-
-            const translateY = distanceY * scrollFraction;
-            const translateX = -distanceX * scrollFraction;
-
-            cell1.style.transform = `translateY(${translateY}px)`;
-            cell3.style.transform = `translateX(${translateX}px)`;
-        }
-
-        scrollContainer.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    updatePosition();
-                    ticking = false;
-                });
-                ticking = true;
+            if (maxScroll <= 0) {
+                scrollTop = window.scrollY || document.documentElement.scrollTop;
+                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             }
-        });
-        
-        window.addEventListener('resize', () => {
-            calculateDimensions();
-            updatePosition();
-        });
 
-        // Initialize dimensions and trigger first render
-        calculateDimensions();
-        updatePosition();
+            const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+            if (scrollPercentage >= 0.8) {
+                const progress = Math.min((scrollPercentage - 0.8) / 0.2, 1);
+                // Interpolate from White (255, 255, 255) to rgb(93, 166, 219) (#5da6db)
+                const r = Math.round(255 - (162 * progress));
+                const g = Math.round(255 - (89 * progress));
+                const b = Math.round(255 - (36 * progress));
+                const color = `rgb(${r}, ${g}, ${b})`;
+                container.style.backgroundColor = color;
+                document.body.style.backgroundColor = color;
+                document.documentElement.style.backgroundColor = color;
+            } else {
+                container.style.backgroundColor = 'white';
+                document.body.style.backgroundColor = 'white';
+                document.documentElement.style.backgroundColor = 'white';
+            }
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll);
+        
+        handleScroll();
+        window.addEventListener('load', handleScroll);
     });
 </script>
-
-<div class="fulu-home-container" itemscope itemtype="http://schema.org/IndexPage">
-    <div class="fulu-home-grid">
-        <div class="fulu-home-grid-spacer"></div>
-        <div class="fulu-home-grid-container">
-            <div class="fulu-home-grid-content">
-                <div class="fulu-home-grid-item i-1">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs4.webp?v=1771882987" alt="Designer 1" fetchpriority="high" />
-                    <div class="fulu-designer-info">Designer 1</div>
-                </div>
-                <div class="fulu-home-grid-item i-2">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs5.webp?v=1771883612" alt="Designer 2" fetchpriority="high" />
-                    <div class="fulu-designer-info">Designer 2</div>
-                </div>
-                <div class="fulu-home-grid-item i-3">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs2.webp?v=1771880941" alt="Designer 3" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 3</div>
-                </div>
-                <div class="fulu-home-grid-item i-4">
-                    <img src="" alt="Designer 4" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 4</div>
-                </div>
-                <div class="fulu-home-grid-item i-5">
-                    <img src="" alt="Designer 5" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 5</div>
-                </div>
-                <div class="fulu-home-grid-item i-6">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/449653920_776232088045944_5274859758452411322_n.jpg?v=1771881234" alt="Designer 6" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 6</div>
-                </div>
-                <div class="fulu-home-grid-item i-7">
-                    <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/fs6.webp?v=1771884770" alt="Designer 7" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 7</div>
-                </div>
-                <div class="fulu-home-grid-item i-8">
-                    <img src="" alt="Designer 8" loading="lazy" />
-                    <div class="fulu-designer-info">Designer 8</div>
-                </div>
-            </div>
-            <div class ="fulu-home-footer-container"></div>
-        </div>
-    </div>
-</div>
