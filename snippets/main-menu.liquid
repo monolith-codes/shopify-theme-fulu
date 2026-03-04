@@ -2,10 +2,10 @@
     <div class="main-menu-overlay">
         <nav class="main-menu-nav">
             <ul class="main-menu-list">
-                <li class="main-menu-item"><a href="/" class="main-menu-link" data-text="Home"><span>Home</span></a></li>
-                <li class="main-menu-item"><a href="/collections/all" class="main-menu-link" data-text="Shop"><span>Shop</span></a></li>
+                <li class="main-menu-item"><a href="{{ routes.root_url }}" class="main-menu-link" data-text="Home"><span>Home</span></a></li>
+                <li class="main-menu-item"><a href="{{ routes.root_url }}" class="main-menu-link" data-text="Shop"><span>Shop</span></a></li>
                 <li class="main-menu-item"><a href="/pages/about" class="main-menu-link" data-text="About"><span>About</span></a></li>
-                <li class="main-menu-item"><a href="/pages/about" class="main-menu-link" data-text="About"><span>Contact</span></a></li>
+                <li class="main-menu-item"><a href="/pages/apply" class="main-menu-link" data-text="About"><span>Apply</span></a></li>
                 {% comment %} {%- if linklists.main-menu.links.size > 0 -%}
                     {%- for link in linklists.main-menu.links -%}
                         <li class="main-menu-item">

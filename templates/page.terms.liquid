@@ -21,7 +21,7 @@
             Registered in Germany<br>
             VAT Number: PLACEHOLDER<br>
             Registered Address: Berlin<br>
-            Email: <a href="mailto:contact@szene.club">contact@szene.club</a>
+            Email: <a href="mailto:contact@szeneclub.com">contact@szeneclub.com</a>
           </p>
         </div>
 
@@ -87,13 +87,10 @@
           <p>These Terms are governed by the laws of Germany. Any disputes shall be resolved exclusively in the courts of Berlin, Germany.</p>
         </div>
       </div>
-
     {% section 'footer' %}
         </div>
   </div>
 </div>
-
-
 
 <style>
   .fulu-content-container {
@@ -115,7 +112,6 @@
   .fulu-page-content {
     display: flex;
     flex-direction: column;
-    margin-top: 25svh;
   }
 
   .fulu-page-terms {
@@ -131,7 +127,19 @@
   }
 
   .fulu-terms-title {
-    font-size: 2.75rem;
+    font-size: 2.25rem;
+  }
+
+  @media screen and (max-width: 700px) and (orientation: portrait){
+    .fulu-page-content {
+      margin-top: 15svh;
+    }
+  }
+
+  @media screen and (max-width: 700px) and (orientation: landscape){
+    .fulu-page-content {
+      margin-top: 0svh;
+    }
   }
 
   @media screen and (max-width: 600px) {
@@ -140,9 +148,9 @@
     }
 
     .fulu-terms-title {
-      font-size: 2.0rem;
+      margin-top: 12.5svh;
+      font-size: 1.8rem;
     }
-
 
     .fulu-page-terms {
       width: 70%;

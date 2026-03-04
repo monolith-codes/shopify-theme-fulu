@@ -11,25 +11,30 @@
 
                     {% form 'contact' %}
                         {% if form.posted_successfully? %}
-                            <p class="form-success">Thanks for applying! We'll be in touch shortly.</p>
-                        {% endif %}
-
-                        {{ form.errors | default_errors }}
-
+                            <div class="fulu-success-container">
+                                <svg class="fulu-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                    <circle class="fulu-checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                                    <path class="fulu-checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                </svg>
+                                <p class="fulu-success-text">Thanks for applying! We'll be in touch shortly.</p>
+                            </div>
+                        {% else %}
+                            {{ form.errors | default_errors }}
+    
                         <div class="fulu-form-row">
                             <div class="fulu-form-group">
-                                <label for="ContactFormName">Name</label>
+                                <label for="ContactFormName" class="fulu-required-label">Name</label>
                                 <input type="text" id="ContactFormName" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
                             </div>
                             <div class="fulu-form-group">
-                                <label for="ContactFormEmail">Email</label>
+                                <label for="ContactFormEmail" class="fulu-required-label">Email</label>
                                 <input type="email" id="ContactFormEmail" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
                             </div>
                         </div>
 
                         <div class="fulu-form-group">
-                            <label for="ContactFormPhone">Phone Number</label>
-                            <input type="tel" id="ContactFormPhone" name="contact[phone]" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+                            <label for="ContactFormPhone" class="fulu-required-label">Phone Number</label>
+                            <input type="tel" id="ContactFormPhone" name="contact[phone]" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" required>
                         </div>
 
                         <div class="fulu-form-group">
@@ -48,11 +53,12 @@
                         </div>
 
                         <div class="fulu-form-group">
-                            <label for="ContactFormMessage">Tell us about yourself</label>
-                            <textarea rows="5" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+                            <label for="ContactFormMessage" class="fulu-required-label">Tell us about yourself</label>
+                            <textarea rows="5" id="ContactFormMessage" name="contact[body]" required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
                         </div>
 
                         <button type="submit" class="fulu-submit-btn">Submit Application</button>
+                        {% endif %}
                     {% endform %}
                 </div>
             </div>
@@ -63,45 +69,7 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const container = document.querySelector('.fulu-content-container');
-        if (!container) return;
-
-        const handleScroll = () => {
-            let scrollTop = container.scrollTop;
-            let maxScroll = container.scrollHeight - container.clientHeight;
-
-            if (maxScroll <= 0) {
-                scrollTop = window.scrollY || document.documentElement.scrollTop;
-                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            }
-
-            const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
-
-            if (scrollPercentage >= 0.8) {
-                const progress = Math.min((scrollPercentage - 0.8) / 0.2, 1);
-                // Interpolate from White (255, 255, 255) to rgb(50, 168, 119)
-                const r = Math.round(255 - (205 * progress));
-                const g = Math.round(255 - (87 * progress));
-                const b = Math.round(255 - (136 * progress));
-                const color = `rgb(${r}, ${g}, ${b})`;
-                container.style.backgroundColor = color;
-                document.body.style.backgroundColor = color;
-                document.documentElement.style.backgroundColor = color;
-            } else {
-                container.style.backgroundColor = 'white';
-                document.body.style.backgroundColor = 'white';
-                document.documentElement.style.backgroundColor = 'white';
-            }
-        };
-
-        container.addEventListener('scroll', handleScroll);
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleScroll);
-        
-        handleScroll();
-        window.addEventListener('load', handleScroll);
-    });
+   
 </script>
 
 <style>
@@ -128,13 +96,15 @@
         display: flex;
         justify-content: center;
         margin-top: 35px;
+        margin-bottom: 0;
         width: calc(100% - 13.8%);
         font-family: "Inter";
-        margin-bottom: 10svh;
     }
 
     .fulu-apply {
         width: 65%;
+        position: relative;
+        right: 2%;
     }
 
     .fulu-apply-title {
@@ -170,6 +140,11 @@
         font-weight: 500;
     }
 
+    .fulu-required-label::after {
+        content: "*";
+        margin-left: 4px;
+    }
+
     .fulu-form-group input,
     .fulu-form-group select,
     .fulu-form-group textarea {
@@ -199,7 +174,7 @@
         border: 1px solid #000;
         font-family: "Inter", sans-serif;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
         margin-top: 20px;
@@ -207,7 +182,7 @@
     }
 
     .fulu-submit-btn:hover {
-        background-color: #fff;
+        background-color: transparent;
         color: #000;
     }
 
@@ -218,6 +193,61 @@
         text-align: center;
     }
 
+    .fulu-success-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 0;
+        animation: fuluFadeIn 0.8s ease-out;
+    }
+
+    .fulu-success-text {
+        font-size: 1.2rem;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .fulu-checkmark {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 2;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        box-shadow: inset 0px 0px 0px #000;
+        animation: fuluFill .4s ease-in-out .4s forwards, fuluScale .3s ease-in-out .9s both;
+    }
+
+    .fulu-checkmark__circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 2;
+        stroke-miterlimit: 10;
+        stroke: #000;
+        fill: none;
+        animation: fuluStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .fulu-checkmark__check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: fuluStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+
+    @keyframes fuluStroke { 100% { stroke-dashoffset: 0; } }
+    @keyframes fuluScale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+    @keyframes fuluFill { 100% { box-shadow: inset 0px 0px 0px 30px transparent; } }
+    @keyframes fuluFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media screen and (max-width: 700px) {
+        .fulu-page-content {
+            margin-top: 0svh !important;
+        }
+    }
+
     @media screen and (max-width: 600px) {
         .fulu-form-row {
             flex-direction: column;
@@ -226,6 +256,16 @@
         
         .fulu-apply-title {
             font-size: 2rem;
+        }
+        
+        .fulu-apply {
+            width: 90%;
+            margin-top: 20svh;
+        }
+
+        .fulu-submit-btn {
+            width: 100%;
+            margin-bottom: 10svh;
         }
     }
 </style>

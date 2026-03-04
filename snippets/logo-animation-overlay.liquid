@@ -1,7 +1,7 @@
 <div class="fulu-logo-animation-container">
     <div class="fulu-logo-animation-ceil">
         <div class="fulu-logo-animation-cell" id="fulu-animation-cell-1">
-            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-1">SZ</div>
+            <div class="fulu-logo-animation-letter" id="fulu-animation-letter-1"><a class="fulu-animation-letter-link" href="{{ routes.root_url }}">SZ</a></div>
         </div>
         <div class="fulu-logo-animation-cell" id="fulu-animation-cell-2">
             <div class="fulu-logo-animation-letter" id="fulu-animation-letter-2">E</div>
@@ -167,11 +167,20 @@
         margin-top: 35px;
         will-change: transform;    
     }
+    
+    .fulu-animation-letter-link {
+        color: black;
+    }
 
     #fulu-animation-letter-1 {
         text-align: center;
         line-height: 10svw;
+        cursor: pointer;
+        pointer-events: auto;
+        overflow: hidden;
+        color: black !important;
     }
+
 
     #fulu-animation-letter-2, #fulu-animation-letter-3 {
         line-height: .63;
