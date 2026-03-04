@@ -1,8 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
     <head>
-        {%- if request.host contains 'szeneclub.com' -%}
-        {%- unless request.path == '/pages/apply' or request.path == '/pages/terms' or request.path == '/policies/privacy-policy' -%}
+
             <script>
                 console.log("Redirect script is firing");
             window.location.href = '/pages/apply';
@@ -11,8 +10,7 @@
             </script>
             <style>html { display: none !important; }</style>
             <meta http-equiv="refresh" content="0;url=/pages/apply">
-        {%- endunless -%}
-        {%- endif -%}
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,initial-scale=1">
