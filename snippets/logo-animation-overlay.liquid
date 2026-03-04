@@ -34,6 +34,7 @@
         let endY = 0;
         let distanceX = 0;
         let offsetX = 0;
+        let resizeTimer;
 
         function calculateDimensions() {
             // Reset transforms to ensure clean measurements
@@ -95,9 +96,12 @@
         scrollContainer.addEventListener('scroll', onScroll);
         window.addEventListener('scroll', onScroll);
         
-        window.addEventListener('resize', () => {
-            calculateDimensions();
-            updatePosition();
+        window.addEventListener('resize', () => { // Debounce resize event
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                calculateDimensions();
+                updatePosition();
+            }, 150);
         });
 
         window.addEventListener('load', () => {
@@ -117,14 +121,14 @@
         height: 100svh;
         width: 100%;
         position: fixed;
-        z-index: 5;
+        z-index: 100;
         pointer-events: none;
     }
     
     .fulu-logo-animation-ceil {
         width: 15svw;
         height: 100%;
-        z-index: 1;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -137,13 +141,15 @@
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
-        flex-grow: 2;
+        flex-grow: 1;
         height: 15svw;
+        z-index: 1000 !important;
         align-self: end;
         pointer-events: none;
     }
 
     .fulu-logo-animation-cell {
+        z-index: 4000 !important;
         pointer-events: none;
         display: inline-flex; 
         width: fit-content;

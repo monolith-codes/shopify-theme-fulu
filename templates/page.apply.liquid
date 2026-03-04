@@ -70,7 +70,25 @@
 
 
 <script>
-   
+    document.addEventListener('DOMContentLoaded', function() {
+        const formElement = document.querySelector('.fulu-apply form');
+        const successContainer = document.querySelector('.fulu-success-container');
+
+        if (formElement) {
+            if (!successContainer) {
+                const updateHeight = () => {
+                    sessionStorage.setItem('fulu_contact_form_height', formElement.offsetHeight);
+                };
+                updateHeight();
+                window.addEventListener('resize', updateHeight);
+            } else {
+                const savedHeight = sessionStorage.getItem('fulu_contact_form_height');
+                if (savedHeight) {
+                    successContainer.style.minHeight = `${savedHeight}px`;
+                }
+            }
+        }
+    });
 </script>
 
 <style>
@@ -205,6 +223,7 @@
         justify-content: center;
         padding: 60px 0;
         animation: fuluFadeIn 0.8s ease-out;
+        box-sizing: border-box;
     }
 
     .fulu-success-text {
