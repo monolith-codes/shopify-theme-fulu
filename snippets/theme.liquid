@@ -9,10 +9,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="canonical" href="{{ canonical_url }}">
         <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-        
-        {%- if page_description -%}
-          <meta name="description" content="{{ page_description | escape }}">
-        {%- endif -%}
+        <link rel="stylesheet" href="https://use.typekit.net/fod3net.css">
 
         <title>
             {{ page_title }}
@@ -21,51 +18,25 @@
             {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
         </title>
 
-        <link rel="stylesheet" href="https://use.typekit.net/fod3net.css">
+        {% if page_description %}
+            <meta name="description" content="{{ page_description | escape }}">
+        {% endif %}
+
         
-        {{ content_for_header }}    
+        {{content_for_header}}
     </head>
 
     <body>
-        <a class="skip-to-content-link visually-hidden" href="#fulu-main-content">Skip to content</a>
-
+        {% render 'main-menu' %}
+        
         <div id="fulu-page-loader">
             <div class="fulu-spinner"></div>
         </div>
-
-        {% render 'main-menu' %}
-
-        <main id="fulu-main-content" role="main" tabindex="-1">
+        <main id="fulu-main-content" role="main">
             {{ content_for_layout }}            
         </main>
     </body>
 </html>
-
-<script>
-    const loadPromise = new Promise(resolve => {
-        if (document.readyState === 'complete') {
-            resolve();
-        } else {
-            window.addEventListener('load', resolve);
-        }
-    });
-
-    const fontPromise = document.fonts ? document.fonts.ready : Promise.resolve();
-
-    Promise.all([loadPromise, fontPromise]).then(() => {
-        const loader = document.getElementById('fulu-page-loader');
-        const content = document.getElementById('fulu-main-content');
-        
-        if (loader && content) {
-            loader.style.opacity = '0';
-            content.style.opacity = '1';
-            
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500);
-        }
-    });
-</script>
 
 <style>
     @font-face {
@@ -84,11 +55,13 @@
     }
 
     html {
+        overflow-x: hidden;
         -webkit-text-size-adjust: 100%;
     }
 
-    body{
+    html, body{
         overflow-x: hidden;
+        touch-action: manipulation;
     }
 
     body {
@@ -145,3 +118,29 @@
         word-wrap: normal !important;
     }
 </style>
+
+<script>
+    const loadPromise = new Promise(resolve => {
+        if (document.readyState === 'complete') {
+            resolve();
+        } else {
+            window.addEventListener('load', resolve);
+        }
+    });
+
+    const fontPromise = document.fonts ? document.fonts.ready : Promise.resolve();
+
+    Promise.all([loadPromise, fontPromise]).then(() => {
+        const loader = document.getElementById('fulu-page-loader');
+        const content = document.getElementById('fulu-main-content');
+        
+        if (loader && content) {
+            loader.style.opacity = '0';
+            content.style.opacity = '1';
+            
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    });
+</script>
