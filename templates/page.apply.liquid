@@ -81,10 +81,22 @@
                 };
                 updateHeight();
                 window.addEventListener('resize', updateHeight);
+
+                formElement.addEventListener('submit', function() {
+                    sessionStorage.setItem('fulu_apply_scroll_pos', window.scrollY);
+                });
             } else {
                 const savedHeight = sessionStorage.getItem('fulu_contact_form_height');
                 if (savedHeight) {
                     successContainer.style.minHeight = `${savedHeight}px`;
+                }
+
+                const savedScroll = sessionStorage.getItem('fulu_apply_scroll_pos');
+                if (savedScroll) {
+                    setTimeout(() => {
+                        window.scrollTo(0, parseFloat(savedScroll));
+                        sessionStorage.removeItem('fulu_apply_scroll_pos');
+                    }, 10);
                 }
             }
         }
