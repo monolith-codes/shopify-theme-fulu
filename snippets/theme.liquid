@@ -4,6 +4,7 @@
         {%- if request.host contains 'szeneclub.com' -%}
         {%- unless request.path == '/pages/apply' or request.path == '/pages/terms' or request.path == '/policies/privacy-policy' -%}
             <script>
+                console.log("Redirect script is firing");
             window.location.href = '/pages/apply';
             // Stop the browser from parsing the rest of the HTML
             window.stop(); 
