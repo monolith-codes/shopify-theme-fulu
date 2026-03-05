@@ -11,6 +11,7 @@
   "current": {
     "site_name": "SZENE CLUB",
     "site_description": "Designer Collective",
+    "favicon": "shopify://shop_images/sclogo.png",
     "sections": {
       "footer": {
         "type": "footer",
