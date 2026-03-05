@@ -258,6 +258,29 @@
       }
       return (cents / 100).toLocaleString('en-US', {style: 'currency', currency: 'EUR'});
     }
+
+    const productForm = document.querySelector('form[action*="/cart/add"]');
+    if (productForm) {
+      productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const submitBtn = productForm.querySelector('[type="submit"]');
+
+        const formData = new FormData(productForm);
+        const action = productForm.getAttribute('action') + '.js';
+
+        fetch(action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((e) => {
+          console.error(e);
+          window.location.reload();
+        });
+      });
+    }
   });
 </script>
 
