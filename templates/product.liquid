@@ -20,11 +20,13 @@
     margin-bottom: 60px;
     background-color: #ebebeb; /* Light grey placeholder background */
     border-radius: 12px;
+    aspect-ratio: 1.75 / 1;
   }
 
   .fulu-gallery-item {
     display: none;
     width: 100%;
+    height: 100%;
     border-radius: 12px;
   }
 
@@ -36,9 +38,8 @@
 
   .fulu-gallery img, .fulu-gallery video {
     width: 100%;
-    height: auto;
-    max-height: 80vh;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     display: block;
     border-radius: 12px;
   }
@@ -146,11 +147,29 @@
   }
 
   .fulu-contact-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     font-size: 0.9rem;
     color: #000;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    text-decoration: none;
+    position: relative;
+  }
+
+  .fulu-contact-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .fulu-contact-link:hover::after {
+    transform: scaleX(1);
   }
 
   /* Right Column: Specifications Table */
@@ -230,7 +249,7 @@
             <img 
               src="{{ media | image_url: width: 2000 }}" 
               alt="{{ media.alt | escape }}"
-              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              loading="eager"
               width="{{ media.width }}"
               height="{{ media.height }}"
             >
@@ -290,7 +309,11 @@
         </button>
       {% endform %}
 
-      <a href="/pages/contact" class="fulu-contact-link">Get in contact</a>
+      <a href="{{ collection.url | default: product.collections.first.url }}" class="fulu-contact-link">
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+          <path d="M15 5H1M5 1L1 5l4 4"/>
+        </svg>Back to designer
+      </a>
     </div>
 
     <div class="fulu-specs-table">
