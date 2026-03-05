@@ -1,11 +1,202 @@
-<div class="">
+{% render 'logo-animation-overlay' %}
 
+
+<div class="fulu-content-container">
+    <div class="fulu-collection-default-container">
+        <div class="fulu-collection-spacer"></div>
+        <div class="fulu-collection-content">
+            <div class="fulu-collection-container">
+                <div class="fulu-collection">
+                    {% if collection.image %}
+                        <div class="fulu-collection-image">
+                            <img src="{{ collection.image | image_url: width: 1200 }}" alt="{{ collection.title }}" fetchpriority="high" width="1200" height="800"/>
+                        </div>
+                    {% endif %}
+                    <h1 class="fulu-collection-title">{{ collection.title }}</h1>
+                    <div class="fulu-collection-text">{{ collection.description }}</div>
+                    <div class="fulu-product-grid">
+                        {% for product in collection.products %}
+                            <a href="{{ product.url }}" class="fulu-product-item">
+                                <div class="fulu-product-image-wrapper">
+                                    <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="lazy" width="800" height="800">
+                                </div>
+                                <div class="fulu-product-title">{{ product.title }}</div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% section 'footer' %}
+        </div>
+    </div>
 </div>
+
 
 <script>
     
 </script>
 
 <style> 
-    
+    .fulu-content-container {
+        height: 100%;
+        width: 100%;
+        z-index: 3;
+        pointer-events: all !important;
+        background-color: white;
+    }
+    .fulu-collection-default-container {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 1fr 6.2fr;
+        z-index: 200;
+    }
+    .fulu-collection-spacer {
+        height: 100%;
+    }
+    .fulu-collection-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 35px;
+        margin-bottom: 0;
+        width: calc(100% - 13.8%);
+        font-family: "Inter";
+    }
+
+    .fulu-collection {
+        height: auto;
+        width: 65%;
+        position: relative;
+        right: 2%;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-bottom: 100px;
+    }
+
+    .fulu-collection-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-align: start;
+        font-weight: 600;
+    }
+
+    .fulu-collection-text p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .fulu-collection-image {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background-color: #f4f4f4;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .fulu-collection-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .fulu-product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        width: 100%;
+    }
+
+    .fulu-product-item {
+        text-decoration: none;
+        color: black;
+        display: block;
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .fulu-product-item::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: grey;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .fulu-product-item:hover::after {
+        opacity: 0.15;
+    }
+
+    .fulu-product-image-wrapper {
+        width: 100%;
+        aspect-ratio: 1/1;
+        background-color: #f4f4f4;
+    }
+
+    .fulu-product-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .fulu-product-item:hover .fulu-product-image-wrapper img {
+    }
+
+    .fulu-product-title {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: left;
+        width: auto;
+        z-index: 4;
+    }
+
+    .fulu-product-item:hover .fulu-product-title {
+        opacity: 1;
+    }
+
+    @media screen and (max-width: 768px) {
+        .fulu-collection-default-container {
+            grid-template-columns: 1fr;
+        }
+        .fulu-collection-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .fulu-collection-spacer {
+            display: none;
+        }
+        .fulu-collection {
+            width: 90%;
+            right: 0;
+            margin-top: 20svh;
+        }
+        .fulu-collection-title {
+            font-size: 2rem;
+        }
+        .fulu-product-grid {
+            grid-template-columns: 1fr;
+        }
+        .fulu-product-title {
+            opacity: 1;
+        }
+    }
 </style>
