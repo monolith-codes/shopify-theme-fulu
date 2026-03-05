@@ -2,7 +2,7 @@
 
 
 <div class="fulu-content-container">
-    <div class="fulu-collection-default-container">
+    <div class="fulu-default-collection-container">
         <div class="fulu-collection-spacer"></div>
         <div class="fulu-collection-content">
             <div class="fulu-collection-container">
@@ -131,7 +131,7 @@
         pointer-events: all !important;
         background-color: white;
     }
-    .fulu-collection-default-container {
+    .fulu-default-collection-container {
         display: grid;
         width: 100%;
         height: 100%;
@@ -151,13 +151,13 @@
     }
 
     .fulu-collection {
-        height: auto;
         width: 65%;
         position: relative;
         right: 2%;
         z-index: 2;
         display: flex;
         flex-direction: column;
+        gap: 40px;
         margin-bottom: 100px;
     }
 
@@ -169,7 +169,7 @@
     }
 
     .fulu-collection-text p {
-        margin-bottom: 10svh;
+        margin-bottom: 20px;
         line-height: 1.5;
         color: #333;
         font-size: 1rem;
@@ -370,21 +370,9 @@
     }
 
     @media screen and (max-width: 768px) {
-        .fulu-collection-default-container {
-            grid-template-columns: 1fr;
-        }
-        .fulu-collection-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .fulu-collection-spacer {
-            display: none;
-        }
+    
         .fulu-collection {
-            width: 90%;
-            right: 0;
+            width: 100%;
             margin-top: 25svh;
         }
         .fulu-collection-title {
