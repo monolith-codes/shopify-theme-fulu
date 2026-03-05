@@ -28,14 +28,16 @@
     </head>
 
     <body>
-        {% render 'main-menu' %}
+        <div class="scroll-container">
+            {% render 'main-menu' %}
         
-        <div id="fulu-page-loader">
-            <div class="fulu-spinner"></div>
+            <div id="fulu-page-loader">
+                <div class="fulu-spinner"></div>
+            </div>
+            <main id="fulu-main-content" role="main">
+                {{ content_for_layout }}            
+            </main>
         </div>
-        <main id="fulu-main-content" role="main">
-            {{ content_for_layout }}            
-        </main>
     </body>
 </html>
 
@@ -61,8 +63,10 @@
     }
 
     html, body{
-        overflow-x: hidden;
-        touch-action: manipulation;
+        overflow: hidden;
+        height: 100%;
+        position: fixed;
+        width: 100%;
     }
 
     body {
@@ -73,6 +77,12 @@
         font-family: "Inter";
         color: #000;
         width: 100%;
+    }
+
+    .scroll-container {
+        height: 100vh; /* Use vh here; it won't resize because body isn't scrolling */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling for older iOS */
     }
 
     #fulu-page-loader {
