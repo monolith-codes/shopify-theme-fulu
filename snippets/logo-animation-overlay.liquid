@@ -18,7 +18,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const scrollContainer = document.querySelector('.fulu-content-container');
+        const scrollContainer = document.querySelector('.scroll-container');
         const cell1 = document.getElementById('fulu-animation-cell-1');
         const cell2 = document.getElementById('fulu-animation-cell-2');
         const cell3 = document.getElementById('fulu-animation-cell-3');
@@ -192,6 +192,7 @@
 
     #fulu-animation-cell-3 {
         margin-right: 20px;
+        will-change: transform;
     }
 
     #fulu-animation-cell-2, #fulu-animation-cell-3 {
@@ -206,7 +207,7 @@
         }
 
         .fulu-logo-animation-letter {
-            font-size: 15svw;
+            font-size: 12.5svw;
             font-family: "tachyon", sans-serif;
             font-weight: 400;
         }
@@ -257,7 +258,7 @@
         }
 
         .fulu-logo-animation-letter {
-            font-size: 8.5svh;
+            font-size: 17.5svw;
         }
     }
 
@@ -268,7 +269,7 @@
         }
 
         .fulu-logo-animation-letter {
-            font-size: 6.5svh;
+            font-size: 20.5svw;
         }
     }
 </style>

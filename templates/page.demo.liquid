@@ -1,0 +1,59 @@
+{%- if request.host contains 'szeneclub.com' -%}
+    <script>window.location.replace('/pages/apply');</script>
+{%- endif -%}
+
+<style>
+    .fulu-content-container {
+        height: 100%;
+        width: 100%;
+        background-color: white;
+    }
+</style>
+
+{% render 'logo-animation-overlay' %}
+
+<div class="fulu-content-container" itemscope itemtype="http://schema.org/IndexPage">
+    {% render 'grid-layout-index-full' %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.querySelector('.fulu-content-container');
+        if (!container) return;
+
+        const handleScroll = () => {
+            let scrollTop = container.scrollTop;
+            let maxScroll = container.scrollHeight - container.clientHeight;
+
+            if (maxScroll <= 0) {
+                scrollTop = window.scrollY || document.documentElement.scrollTop;
+                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            }
+
+            const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+            if (scrollPercentage >= 0.8) {
+                const progress = Math.min((scrollPercentage - 0.8) / 0.2, 1);
+                // Interpolate from White (255, 255, 255) to rgb(93, 166, 219) (#5da6db)
+                const r = Math.round(255 - (162 * progress));
+                const g = Math.round(255 - (89 * progress));
+                const b = Math.round(255 - (36 * progress));
+                const color = `rgb(${r}, ${g}, ${b})`;
+                container.style.backgroundColor = color;
+                document.body.style.backgroundColor = color;
+                document.documentElement.style.backgroundColor = color;
+            } else {
+                container.style.backgroundColor = 'white';
+                document.body.style.backgroundColor = 'white';
+                document.documentElement.style.backgroundColor = 'white';
+            }
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll);
+        
+        handleScroll();
+        window.addEventListener('load', handleScroll);
+    });
+</script>

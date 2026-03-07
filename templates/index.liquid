@@ -1,7 +1,3 @@
-{%- if request.host contains 'szeneclub.com' -%}
-    <script>window.location.replace('/pages/apply');</script>
-{%- endif -%}
-
 <style>
     .fulu-content-container {
         height: 100%;
@@ -13,17 +9,18 @@
 {% render 'logo-animation-overlay' %}
 
 <div class="fulu-content-container" itemscope itemtype="http://schema.org/IndexPage">
-    {% render 'grid-layout-index' %}
+    {% render 'grid-layout-index-small' %}
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const container = document.querySelector('.fulu-content-container');
-        if (!container) return;
+        const scrollContainer = document.querySelector('.scroll-container');
+        if (!container || !scrollContainer) return;
 
         const handleScroll = () => {
-            let scrollTop = container.scrollTop;
-            let maxScroll = container.scrollHeight - container.clientHeight;
+            let scrollTop = scrollContainer.scrollTop;
+            let maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
 
             if (maxScroll <= 0) {
                 scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -49,7 +46,7 @@
             }
         };
 
-        container.addEventListener('scroll', handleScroll);
+        scrollContainer.addEventListener('scroll', handleScroll);
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('resize', handleScroll);
         

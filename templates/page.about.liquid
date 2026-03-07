@@ -1,0 +1,147 @@
+{% render 'logo-animation-overlay' %}
+
+
+<div class="fulu-content-container">
+    <div class="fulu-page-about-container">
+        <div class="fulu-about-spacer"></div>
+        <div class="fulu-about-content">
+            <div class="fulu-about-container">
+                <div class="fulu-about">
+                    <div class="fulu-about-image">
+                        <img src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/skirt-01-04.webp?v=1772678457" alt="About Us" loading="eager" fetchpriority="high" width="1200" height="800"/>
+                    </div>
+                    <h1 class="fulu-about-title">About Us</h1>
+                    <div class="fulu-about-text">
+                        <p>We are a Berlin-based digital concept store dedicated to emerging designers from across Europe. Our platform brings together unseen creativity in one curated space - a place to discover new talent, fresh perspectives, and distinctive design.</p>
+                        <p>We believe that independent designers deserve more than shelf space. Each creative we work with is introduced through an in-depth interview and a dedicated social feature, offering insight into their process, vision, and story.</p>
+                        <p>More than a retail destination, we see ourselves as a platform for visibility - connecting designers with a new audience seeking unique, meaningful pieces beyond the traditional fashion bubble.</p>
+                    </div>
+                    <div class="fulu-about-apply">
+                        <a href="/pages/apply" class="fulu-about-apply-btn">Join us now!</a>
+                    </div>
+                </div>
+            </div>
+            {% section 'footer' %}
+        </div>
+    </div>
+</div>
+
+<script></script>
+
+<style>
+    .fulu-content-container {
+        height: 100%;
+        width: 100%;
+        z-index: 3;
+        pointer-events: all !important;
+        background-color: white;
+    }
+    .fulu-page-about-container {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 1fr 6.2fr;
+        z-index: 200;
+    }
+    .fulu-about-spacer {
+        height: 100%;
+    }
+    .fulu-about-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 35px;
+        margin-bottom: 0;
+        width: calc(100% - 13.8%);
+        font-family: "Inter";
+    }
+
+    .fulu-about {
+        width: 65%;
+        position: relative;
+        right: 2%;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-bottom: 100px;
+    }
+
+    .fulu-about-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-align: start;
+        font-weight: 600;
+    }
+
+    .fulu-about-text p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .fulu-about-image {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background-color: #f4f4f4;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .fulu-about-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: #e0e0e0;
+        object-position: top;
+        object-fit: cover;
+    }
+
+    .fulu-about-apply-btn {
+        background: transparent;
+        border: 0;
+        display: inline-block;
+        position: relative;
+        font-family: "Inter";
+        line-height: 1.5;
+        color: #333;
+        font-size: 1.25rem;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .fulu-about-apply-btn::after,
+    .fulu-about-apply-btn::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 3px;
+        background-color: black; 
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .fulu-about-apply-btn:hover::after,
+    .fulu-about-apply-btn:hover::after {
+        transform: scaleX(1);
+    }
+
+    @media screen and (max-width: 768px) {
+
+        .fulu-about {
+            width: 100%;
+            right: 0;
+            margin-top: 25svh;
+        }
+        .fulu-about-title {
+            font-size: 2rem;
+        }
+    }
+</style>
