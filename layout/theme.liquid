@@ -29,7 +29,9 @@
 
     <body>
         <div class="scroll-container">
-            {% render 'main-menu' %}
+            {% unless template == 'password' %}
+                {% render 'main-menu' %}
+            {% endunless %}
         
             <div id="fulu-page-loader">
                 <div class="fulu-spinner"></div>
