@@ -31,10 +31,10 @@
 
             if (scrollPercentage >= 0.8) {
                 const progress = Math.min((scrollPercentage - 0.8) / 0.2, 1);
-                // Interpolate from White (255, 255, 255) to rgb(93, 166, 219) (#5da6db)
-                const r = Math.round(255 - (162 * progress));
-                const g = Math.round(255 - (89 * progress));
-                const b = Math.round(255 - (36 * progress));
+                // Interpolate from White (255, 255, 255) to rgb(251, 239, 208) (#fbefd0)
+                const r = Math.round(255 - (4 * progress));
+                const g = Math.round(255 - (16 * progress));
+                const b = Math.round(255 - (47 * progress));
                 const color = `rgb(${r}, ${g}, ${b})`;
                 container.style.backgroundColor = color;
                 document.body.style.backgroundColor = color;
