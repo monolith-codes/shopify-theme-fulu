@@ -1,0 +1,392 @@
+{% render 'logo-animation-overlay' %}
+
+
+<div class="fulu-content-container">
+    <div class="fulu-default-collection-container">
+        <div class="fulu-collection-spacer"></div>
+        <div class="fulu-collection-content">
+            <div class="fulu-collection-container">
+                <div class="fulu-collection">
+                    {% if collection.image %}
+                        <div class="fulu-collection-image">
+                            <img src="{{ collection.image | image_url: width: 1200 }}" alt="{{ collection.title }}" loading="eager" fetchpriority="high" width="1200" height="800"/>
+                        </div>
+                    {% endif %}
+                    <h1 class="fulu-collection-title">{{ collection.title }}</h1>
+                    <div class="fulu-collection-text">{{ collection.description }}</div>
+                    
+                    {% assign has_active_filters = false %}
+                    {% for filter in collection.filters %}
+                        {% if filter.active_values.size > 0 %}
+                            {% assign has_active_filters = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="fulu-filter-wrapper">
+                        <div class="fulu-filter-controls">
+                            <button id="filter-toggle" class="fulu-filter-toggle">
+                                Filter
+                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            {% if has_active_filters %}
+                                <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="fulu-filter-clear">Clear</a>
+                            {% endif %}
+                        </div>
+                        <div id="filter-dropdown" class="fulu-filter-dropdown">
+                            <form class="filter-form">
+                                
+
+                                {% assign target_filter = 'category' %}
+                                {% for i in (1..2) %}
+                                    {% for filter in collection.filters %}
+                                        {% if filter.type == 'price_range' %}
+                                            {% continue %}
+                                        {% endif %}
+
+                                        {% assign filter_label_down = filter.label | downcase %}
+                                        {% if i == 1 %}
+                                            {% unless filter_label_down == target_filter %}{% continue %}{% endunless %}
+                                        {% else %}
+                                            {% if filter_label_down == target_filter %}{% continue %}{% endif %}
+                                        {% endif %}
+
+                                        <div class="filter-group">
+                                            <div class="filter-label">{{ filter.label }}</div>
+                                            {% case filter.type %}
+                                                {% when 'list', 'boolean' %}
+                                                    <ul class="filter-list">
+                                                        {% for value in filter.values %}
+                                                            {% if value.param_name == 'filter.v.availability' and value.value == '0' %}
+                                                                {% continue %}
+                                                            {% endif %}
+                                                            <li>
+                                                                <label class="filter-checkbox">
+                                                                    <input type="checkbox"
+                                                                        name="{{ value.param_name }}"
+                                                                        value="{{ value.value }}"
+                                                                        {% if value.active %}checked{% endif %}
+                                                                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                                                    >
+                                                                    {{ value.label }}
+                                                                </label>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                            {% endcase %}
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                <div class="filter-actions">
+                                    <button type="submit" class="filter-apply">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="fulu-product-grid">
+                        {% for product in collection.products %}
+                            <a href="{{ product.url }}" class="fulu-product-item">
+                                <div class="fulu-product-image-wrapper">
+                                    <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" height="800">
+                                </div>
+                                <div class="fulu-product-title">{{ product.title }}</div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% section 'footer' %}
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterToggle = document.getElementById('filter-toggle');
+        const filterDropdown = document.getElementById('filter-dropdown');
+
+        if (filterToggle && filterDropdown) {
+            filterToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                filterDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!filterDropdown.contains(e.target) && !filterToggle.contains(e.target)) {
+                    filterDropdown.classList.remove('active');
+                }
+            });
+        }
+    });
+</script>
+
+<style> 
+    .fulu-content-container {
+        height: 100%;
+        width: 100%;
+        z-index: 3;
+        pointer-events: all !important;
+        background-color: white;
+    }
+    .fulu-default-collection-container {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 1fr 6.2fr;
+        z-index: 200;
+    }
+    .fulu-collection-spacer {
+        height: 100%;
+    }
+    .fulu-collection-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 35px;
+        margin-bottom: 0;
+        width: calc(100% - 13.8%);
+        font-family: "Inter";
+    }
+
+    .fulu-collection {
+        width: 65%;
+        position: relative;
+        right: 2%;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-bottom: 100px;
+    }
+
+    .fulu-collection-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-align: start;
+        font-weight: 600;
+    }
+
+    .fulu-collection-text p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .fulu-collection-image {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background-color: #f4f4f4;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .fulu-collection-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .fulu-filter-wrapper {
+        position: relative;
+        margin-bottom: 30px;
+        z-index: 10;
+    }
+
+    .fulu-filter-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .fulu-filter-clear {
+        font-size: 0.9rem;
+        color: #666;
+        text-decoration: none;
+        border-bottom: 1px solid #666;
+    }
+
+    .fulu-filter-clear:hover {
+        color: #000;
+        border-color: #000;
+    }
+
+    .fulu-filter-toggle {
+        background: none;
+        border: 1px solid #e5e5e5;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background-color 0.2s;
+    }
+
+    .fulu-filter-toggle:hover {
+        background-color: #f9f9f9;
+    }
+
+    .fulu-filter-dropdown {
+        min-width: 20svw;
+        max-width: 400px;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 10px;
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .fulu-filter-dropdown.active {
+        display: block;
+    }
+
+    .filter-group {
+        margin-bottom: 20px;
+    }
+
+    .filter-sort-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        background-color: white;
+        font-family: inherit;
+        font-size: 0.9rem;
+    }
+
+    .filter-label {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .filter-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .filter-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+    .filter-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .filter-apply {
+        background: black;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .fulu-product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        width: 100%;
+    }
+
+    .fulu-product-item {
+        text-decoration: none;
+        color: black;
+        display: block;
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .fulu-product-item::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: grey;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .fulu-product-item:hover::after {
+        opacity: 0.15;
+    }
+
+    .fulu-product-image-wrapper {
+        width: 100%;
+        aspect-ratio: 1/1;
+        background-color: #f4f4f4;
+    }
+
+    .fulu-product-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .fulu-product-item:hover .fulu-product-image-wrapper img {
+    }
+
+    .fulu-product-title {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: left;
+        width: auto;
+        z-index: 4;
+    }
+
+    .fulu-product-item:hover .fulu-product-title {
+        opacity: 1;
+    }
+
+    @media screen and (max-width: 768px) {
+    
+        .fulu-collection {
+            width: 100%;
+            margin-top: 25svh;
+        }
+        .fulu-collection-title {
+            font-size: 2rem;
+        }
+        .fulu-product-grid {
+            grid-template-columns: 1fr;
+        }
+        .fulu-product-title {
+            opacity: 1;
+        }
+
+        .fulu-filter-dropdown {
+            min-width: 70svw;
+        }
+    }
+</style>
