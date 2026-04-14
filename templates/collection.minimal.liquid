@@ -14,7 +14,7 @@
                             <img src="{{ collection.image | image_url: width: 1200 }}" alt="{{ collection.title }}" loading="eager" fetchpriority="high" width="1200" height="800"/>
                         </div>
                     {% endif %}
-                    <h1 class="fulu-collection-title">{{ collection.title }}</h1>
+                    <h1 class="fulu-collection-title">{{ collection.title }} - <span class="fulu-current-filter">All</span></h1>
 
 
                     <div class="fulu-collection-filter-menu">
@@ -55,11 +55,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // 1. Grab ALL filter links from BOTH the desktop and mobile menus
+        const filterLinks = document.querySelectorAll('.shop-menu a, .fulu-filter-menu-dropdown a');
+        const products = document.querySelectorAll('.fulu-product-item');
         const filterMenu = document.querySelector('.fulu-collection-filter-menu');
         const burgerBtn = document.querySelector('.fulu-filter-burger-button');
-        const filterLinks = document.querySelectorAll('.fulu-filter-menu-dropdown a');
-        const products = document.querySelectorAll('.fulu-product-item');
+        const currentFilterDisplay = document.querySelector('.fulu-current-filter');
 
+        // 2. Handle mobile burger menu toggle
         if (burgerBtn && filterMenu) {
             burgerBtn.addEventListener('click', () => {
                 burgerBtn.classList.toggle('open');
@@ -67,30 +70,50 @@
             });
         }
 
+        // 3. Handle filter clicking
         filterLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 
-                filterLinks.forEach(el => el.classList.remove('active'));
-                link.classList.add('active');
-
-                const filter = link.getAttribute('data-filter');
+                // Get the filter value and force it to lowercase to ensure it matches Shopify's handleize/downcase
+                const filter = link.getAttribute('data-filter').toLowerCase();
+                const filterText = link.textContent;
                 
+                // Sync the "active" styling across BOTH menus so they match
+                filterLinks.forEach(el => {
+                    if(el.getAttribute('data-filter').toLowerCase() === filter) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+
+                // Update the text that says "All", "Bags", etc. next to the title
+                if (currentFilterDisplay) {
+                    currentFilterDisplay.textContent = filterText;
+                }
+                
+                // 4. Filter the products
                 products.forEach(product => {
-                    const productType = product.getAttribute('data-product-type') || '';
-                    const productTags = product.getAttribute('data-tags') || '';
+                    const productType = (product.getAttribute('data-product-type') || '').toLowerCase();
                     
+                    // Grab tags, lowercase them, and split them into a clean array (e.g. ['bags', 'leather', 'black'])
+                    const tagsString = (product.getAttribute('data-tags') || '').toLowerCase();
+                    const productTags = tagsString.split(',').map(tag => tag.trim()); 
+                    
+                    // Check if it's "all", matches the product type, OR if the tag array contains the filter word
                     if (filter === 'all' || productType === filter || productTags.includes(filter)) {
-                        product.style.display = 'block';
+                        product.style.display = 'block'; 
                     } else {
                         product.style.display = 'none';
                     }
                 });
 
-                // Close menu after selection
-                burgerBtn.classList.remove('open');
-                filterMenu.classList.remove('active');
+                // Close mobile menu after selection (if it exists)
+                if (burgerBtn) burgerBtn.classList.remove('open');
+                if (filterMenu) filterMenu.classList.remove('active');
 
+                // Trigger a resize event to make other components recalculate layout
                 window.dispatchEvent(new Event('resize'));
             });
         });
