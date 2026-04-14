@@ -28,7 +28,6 @@
 
         let ticking = false;
         let maxScroll = 0;
-        let isWindowScroll = false;
         let startY = 0;
         let startX = 0;
         let endY = 0;
@@ -41,17 +40,9 @@
             cell1.style.transform = '';
             cell3.style.transform = '';
 
-            maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-            
-            if (maxScroll <= 0) {
-                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                isWindowScroll = true;
-            } else {
-                isWindowScroll = false;
-            }
-            
-            maxScroll = Math.max(0, maxScroll);
-            
+            // Always calculate maxScroll based on the scroll container and ensure it's not negative.
+            maxScroll = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
+
             const rect1 = cell1.getBoundingClientRect();
             const rect2 = cell2.getBoundingClientRect();
             const rect3 = cell3.getBoundingClientRect();
@@ -69,8 +60,7 @@
         }
 
         function updatePosition() {
-            const scrollTop = isWindowScroll ? (window.scrollY || document.documentElement.scrollTop) : scrollContainer.scrollTop;
-            
+            const scrollTop = scrollContainer.scrollTop;
             // Calculate and clamp fraction between 0 and 1 cleanly
             const scrollFraction = maxScroll > 0 
                 ? Math.min(Math.max(scrollTop / maxScroll, 0), 1) 

@@ -1,5 +1,7 @@
 {% render 'logo-animation-overlay' %}
 
+{% render 'shop-menu' %}
+
 
 <div class="fulu-content-container">
     <div class="fulu-default-collection-container">
@@ -13,81 +15,29 @@
                         </div>
                     {% endif %}
                     <h1 class="fulu-collection-title">{{ collection.title }}</h1>
-                    <div class="fulu-collection-text">{{ collection.description }}</div>
-                    
-                    {% assign has_active_filters = false %}
-                    {% for filter in collection.filters %}
-                        {% if filter.active_values.size > 0 %}
-                            {% assign has_active_filters = true %}
-                        {% endif %}
-                    {% endfor %}
 
-                    <div class="fulu-filter-wrapper">
-                        <div class="fulu-filter-controls">
-                            <button id="filter-toggle" class="fulu-filter-toggle">
-                                Filter
-                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            {% if has_active_filters %}
-                                <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="fulu-filter-clear">Clear</a>
-                            {% endif %}
-                        </div>
-                        <div id="filter-dropdown" class="fulu-filter-dropdown">
-                            <form class="filter-form">
-                                
 
-                                {% assign target_filter = 'category' %}
-                                {% for i in (1..2) %}
-                                    {% for filter in collection.filters %}
-                                        {% if filter.type == 'price_range' %}
-                                            {% continue %}
-                                        {% endif %}
-
-                                        {% assign filter_label_down = filter.label | downcase %}
-                                        {% if i == 1 %}
-                                            {% unless filter_label_down == target_filter %}{% continue %}{% endunless %}
-                                        {% else %}
-                                            {% if filter_label_down == target_filter %}{% continue %}{% endif %}
-                                        {% endif %}
-
-                                        <div class="filter-group">
-                                            <div class="filter-label">{{ filter.label }}</div>
-                                            {% case filter.type %}
-                                                {% when 'list', 'boolean' %}
-                                                    <ul class="filter-list">
-                                                        {% for value in filter.values %}
-                                                            {% if value.param_name == 'filter.v.availability' and value.value == '0' %}
-                                                                {% continue %}
-                                                            {% endif %}
-                                                            <li>
-                                                                <label class="filter-checkbox">
-                                                                    <input type="checkbox"
-                                                                        name="{{ value.param_name }}"
-                                                                        value="{{ value.value }}"
-                                                                        {% if value.active %}checked{% endif %}
-                                                                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                                                                    >
-                                                                    {{ value.label }}
-                                                                </label>
-                                                            </li>
-                                                        {% endfor %}
-                                                    </ul>
-                                            {% endcase %}
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-                                <div class="filter-actions">
-                                    <button type="submit" class="filter-apply">Apply</button>
-                                </div>
-                            </form>
+                    <div class="fulu-collection-filter-menu">
+                        <button type="button" class="fulu-filter-burger-button" aria-label="Toggle filter menu">
+                            <span class="fulu-filter-burger-line"></span>
+                            <span class="fulu-filter-burger-line"></span>
+                            <span class="fulu-filter-burger-line"></span>
+                        </button>
+                        <div class="fulu-filter-menu-dropdown">
+                            <a href="#" data-filter="all" class="active">All</a>
+                            <a href="#" data-filter="bags">Bags</a>
+                            <a href="#" data-filter="jewelry">Jewelry</a>
+                            <a href="#" data-filter="tops">Tops</a>
+                            <a href="#" data-filter="bottoms">Bottoms</a>
+                            <a href="#" data-filter="shoes">Shoes</a>
                         </div>
                     </div>
+                    
 
+                    
                     <div class="fulu-product-grid">
                         {% for product in collection.products %}
-                            <a href="{{ product.url }}" class="fulu-product-item">
+                            <a href="{{ product.url }}" class="fulu-product-item" data-product-type="{{ product.type | handleize }}" data-tags="{{ product.tags | join: ',' | downcase }}">
                                 <div class="fulu-product-image-wrapper">
                                     <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" height="800">
                                 </div>
@@ -104,22 +54,46 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterToggle = document.getElementById('filter-toggle');
-        const filterDropdown = document.getElementById('filter-dropdown');
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterMenu = document.querySelector('.fulu-collection-filter-menu');
+        const burgerBtn = document.querySelector('.fulu-filter-burger-button');
+        const filterLinks = document.querySelectorAll('.fulu-filter-menu-dropdown a');
+        const products = document.querySelectorAll('.fulu-product-item');
 
-        if (filterToggle && filterDropdown) {
-            filterToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                filterDropdown.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!filterDropdown.contains(e.target) && !filterToggle.contains(e.target)) {
-                    filterDropdown.classList.remove('active');
-                }
+        if (burgerBtn && filterMenu) {
+            burgerBtn.addEventListener('click', () => {
+                burgerBtn.classList.toggle('open');
+                filterMenu.classList.toggle('active');
             });
         }
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                filterLinks.forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+
+                const filter = link.getAttribute('data-filter');
+                
+                products.forEach(product => {
+                    const productType = product.getAttribute('data-product-type') || '';
+                    const productTags = product.getAttribute('data-tags') || '';
+                    
+                    if (filter === 'all' || productType === filter || productTags.includes(filter)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+
+                // Close menu after selection
+                burgerBtn.classList.remove('open');
+                filterMenu.classList.remove('active');
+
+                window.dispatchEvent(new Event('resize'));
+            });
+        });
     });
 </script>
 
@@ -151,7 +125,7 @@
     }
 
     .fulu-collection {
-        width: 65%;
+        width: 85%;
         position: relative;
         right: 2%;
         z-index: 2;
@@ -188,6 +162,97 @@
         height: 100%;
         object-fit: cover;
         object-position: top;
+    }
+
+    .fulu-collection-filter-menu {
+        position: relative;
+        display: none;
+        margin-bottom: 30px;
+        z-index: 10;
+    }
+
+    @media screen and (orientation: portrait) {
+        .fulu-collection-filter-menu {
+            display: inline-block;
+        }
+    }
+
+    .fulu-filter-burger-button {
+        position: relative;
+        width: 30px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 11;
+    }
+
+    .fulu-filter-burger-line {
+        position: absolute;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background-color: #000;
+        border-radius: 10px;
+        transition: transform 0.3s ease, opacity 0.3s ease, top 0.3s ease;
+    }
+
+    .fulu-filter-burger-line:nth-child(1) { top: 2px; }
+    .fulu-filter-burger-line:nth-child(2) { top: 11px; }
+    .fulu-filter-burger-line:nth-child(3) { top: 20px; }
+
+    .fulu-filter-burger-button.open .fulu-filter-burger-line:nth-child(1) {
+        top: 11px;
+        transform: rotate(45deg);
+    }
+
+    .fulu-filter-burger-button.open .fulu-filter-burger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .fulu-filter-burger-button.open .fulu-filter-burger-line:nth-child(3) {
+        top: 11px;
+        transform: rotate(-45deg);
+    }
+
+    .fulu-filter-menu-dropdown {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        min-width: 200px;
+    }
+
+    .fulu-collection-filter-menu.active .fulu-filter-menu-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .fulu-filter-menu-dropdown a {
+        font-family: "Inter", sans-serif;
+        font-size: 1.2rem;
+        color: black;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.2s ease;
+    }
+
+    .fulu-filter-menu-dropdown a:hover,
+    .fulu-filter-menu-dropdown a.active {
+        opacity: 0.5;
     }
 
     .fulu-filter-wrapper {
@@ -307,6 +372,7 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 30px;
         width: 100%;
+        min-height: 600px;
     }
 
     .fulu-product-item {
@@ -357,7 +423,7 @@
         left: 20px;
         opacity: 0;
         transition: opacity 0.3s ease;
-        color: #fff;
+        color: #3d1b31;
         font-size: 1.5rem;
         font-weight: bold;
         text-align: left;

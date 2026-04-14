@@ -34,16 +34,20 @@
 
               {% if product.media.size > 1 %}
                 <button class="fulu-nav-btn fulu-prev" aria-label="Previous">
-                  <img class="fulu-nav-btn-icon" src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/move-left-white.svg?v=1771802714" alt="Previous" width="50" height="50">
+                  <svg class="lucide lucide-move-left-icon lucide-move-left" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6 8L2 12L6 16"></path><path d="M2 12H22"></path></svg>
                 </button>
                 <button class="fulu-nav-btn fulu-next" aria-label="Next">
-                  <img class="fulu-nav-btn-icon" src="https://cdn.shopify.com/s/files/1/1043/1584/6995/files/move-right-white.svg?v=1771802714" alt="Next" width="50" height="50">
+                  <svg class="lucide lucide-move-right-icon lucide-move-right" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 8L22 12L18 16"></path><path d="M2 12H22"></path></svg>
                 </button>
                 
                 <div class="fulu-gallery-counter">
                   <span id="fulu-current-slide">1</span> / {{ product.media.size }}
                 </div>
               {% endif %}
+
+              <button class="fulu-maximize" aria-label="Maximize">
+                <svg class="lucide lucide-maximize" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
+              </button>
             </div>
 
             <div class="fulu-details">
@@ -187,7 +191,20 @@
   </div>
 </div>
 
-
+<div class="fulu-maximize-overlay" id="fuluMaximizeOverlay">
+  <button class="fulu-close-maximize" id="fuluCloseMaximize" aria-label="Close">
+    <svg class="lucide lucide-x" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+  </button>
+  {% if product.media.size > 1 %}
+    <button class="fulu-max-nav-btn fulu-max-prev" aria-label="Previous">
+      <svg class="lucide lucide-move-left" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6 8L2 12L6 16"></path><path d="M2 12H22"></path></svg>
+    </button>
+    <button class="fulu-max-nav-btn fulu-max-next" aria-label="Next">
+      <svg class="lucide lucide-move-right" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 8L22 12L18 16"></path><path d="M2 12H22"></path></svg>
+    </button>
+  {% endif %}
+  <div class="fulu-maximize-content" id="fuluMaximizeContent"></div>
+</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -199,18 +216,79 @@
     const counterDisplay = document.getElementById('fulu-current-slide');
     let currentSlide = 0;
 
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+      currentSlide = index;
+      if(counterDisplay) counterDisplay.textContent = currentSlide + 1;
+    }
+
     if (slides.length > 1 && prevBtn && nextBtn) {
-      function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index].classList.add('active');
-        currentSlide = index;
-        if(counterDisplay) counterDisplay.textContent = currentSlide + 1;
-      }
       prevBtn.addEventListener('click', () => {
         showSlide((currentSlide - 1 + slides.length) % slides.length);
       });
       nextBtn.addEventListener('click', () => {
         showSlide((currentSlide + 1) % slides.length);
+      });
+    }
+
+    // Maximize Logic
+    const maximizeBtn = document.querySelector('.fulu-maximize');
+    const maximizeOverlay = document.getElementById('fuluMaximizeOverlay');
+    const closeMaximizeBtn = document.getElementById('fuluCloseMaximize');
+    const maximizeContent = document.getElementById('fuluMaximizeContent');
+    const maxPrevBtn = document.querySelector('.fulu-max-prev');
+    const maxNextBtn = document.querySelector('.fulu-max-next');
+
+    if (maximizeBtn && maximizeOverlay) {
+      function updateMaximizeContent() {
+        const activeSlide = document.querySelector('.fulu-gallery-item.active');
+        if (activeSlide) {
+          const media = activeSlide.firstElementChild;
+          if (media) {
+            maximizeContent.innerHTML = '';
+            const clonedMedia = media.cloneNode(true);
+            maximizeContent.appendChild(clonedMedia);
+          }
+        }
+      }
+
+      maximizeBtn.addEventListener('click', () => {
+        updateMaximizeContent();
+        maximizeOverlay.classList.add('active');
+      });
+
+      const closeOverlay = () => {
+        maximizeOverlay.classList.remove('active');
+        maximizeContent.innerHTML = ''; // Clear to prevent videos from continuing to play in background
+      };
+
+      closeMaximizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeOverlay();
+      });
+
+      if (maxPrevBtn && maxNextBtn) {
+        maxPrevBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (slides.length > 1) {
+            showSlide((currentSlide - 1 + slides.length) % slides.length);
+            updateMaximizeContent();
+          }
+        });
+        maxNextBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (slides.length > 1) {
+            showSlide((currentSlide + 1) % slides.length);
+            updateMaximizeContent();
+          }
+        });
+      }
+
+      maximizeOverlay.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'IMG' && e.target.tagName !== 'VIDEO') {
+          closeOverlay();
+        }
       });
     }
 
@@ -369,10 +447,16 @@
   .fulu-prev { left: 20px; }
   .fulu-next { right: 20px; }
 
+  .fulu-nav-btn-icon svg{
+    stroke: #000000;
+    stroke-width: 1.5;
+  }
+
   .fulu-nav-btn svg {
+    fill: black;
     width: 30px;
     height: 30px;
-    stroke: #000;
+    stroke: #000000;
     stroke-width: 1.5;
   }
 
@@ -389,6 +473,98 @@
   @keyframes fadeIn {
     from { opacity: 0.8; }
     to { opacity: 1; }
+  }
+
+  /* --- Maximize Overlay --- */
+  .fulu-maximize {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 10;
+    transition: opacity 0.2s;
+    opacity: 0.5;
+    color: black;
+  }
+
+  .fulu-maximize:hover {
+    opacity: 1;
+  }
+
+  .fulu-maximize-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: visibility 0s, opacity 0.3s ease;
+  }
+
+  .fulu-maximize-overlay.active {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .fulu-close-maximize {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 100000;
+  }
+
+  .fulu-max-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 20px;
+    z-index: 100000;
+    transition: opacity 0.2s;
+    opacity: 0.6;
+  }
+
+  .fulu-max-nav-btn:hover {
+    opacity: 1;
+  }
+
+  .fulu-max-prev { left: 20px; }
+  .fulu-max-next { right: 20px; }
+
+  .fulu-max-nav-btn svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fulu-maximize-content {
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fulu-maximize-content img, .fulu-maximize-content video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
   }
 
   /* --- Bottom Details Layout --- */

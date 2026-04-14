@@ -1,0 +1,103 @@
+<div class="shop-menu-wrapper">
+    <div class="shop-menu">
+        <a href="#" data-filter="all" class="active">All</a>
+        <a href="#" data-filter="bags">Bags</a>
+        <a href="#" data-filter="jewelry">Jewelry</a>
+        <a href="#" data-filter="tops">Tops</a>
+        <a href="#" data-filter="bottoms">Bottoms</a>
+        <a href="#" data-filter="shoes">Shoes</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterLinks = document.querySelectorAll('.shop-menu a');
+        const products = document.querySelectorAll('.fulu-product-item');
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+
+                e.preventDefault();
+                
+                filterLinks.forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+
+                const filter = link.getAttribute('data-filter');
+                
+                products.forEach(product => {
+                    const productType = product.getAttribute('data-product-type') || '';
+                    const productTags = product.getAttribute('data-tags') || '';
+                    
+                    if (filter === 'all' || productType === filter || productTags.includes(filter)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+
+                // Trigger a resize event to make other components recalculate layout
+                window.dispatchEvent(new Event('resize'));
+            });
+        });
+    });
+</script>
+
+<style>
+    .shop-menu-wrapper {
+        position: fixed;
+        overflow: hidden !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100svh;
+        z-index: 10000;
+        overscroll-behavior: none;
+        pointer-events: none;
+    }
+
+    .shop-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 35px;
+        right: 35px;
+        width: 22.5svh;
+        height: 100%;
+        pointer-events: none;
+
+        a {
+            font-family: "Inter";
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: black;
+            text-decoration: none;
+            margin: 10px 0;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: opacity 0.2s ease;
+        }
+
+        a:hover, a.active {
+            opacity: 0.5;
+        }
+    }
+
+   
+    
+    @media screen and (max-width: 1200px) {
+        .shop-menu {
+            width: 15svw;
+            top: 40px;
+            right: 35px;
+        }
+    }
+
+    @media screen and (orientation: portrait) {
+        .shop-menu {
+            display: none;
+        }
+    }
+
+</style>
