@@ -177,6 +177,11 @@
                           <img src="{{ related_product.featured_image | image_url: width: 800 }}" alt="{{ related_product.title }}" loading="lazy" width="800" height="800">
                         </div>
                         <div class="fulu-product-title">{{ related_product.title }}</div>
+                        {% unless related_product.available %}
+                          <div class="fulu-sold-out-badge">
+                            <span class="fulu-sold-out-text">sold out</span>
+                          </div>
+                        {% endunless %}
                       </a>
                       {% if related_product.available %}
                         <button class="fulu-quick-add-btn" data-variant-id="{{ related_product.first_available_variant.id }}" aria-label="Quick add to cart">
@@ -831,6 +836,40 @@
     opacity: 1;
   }
 
+  .fulu-sold-out-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 24px;
+    width: 24px;
+    background-color: #ff0000;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    z-index: 10;
+  }
+
+  .fulu-sold-out-badge:hover {
+    width: 80px;
+  }
+
+  .fulu-sold-out-text {
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .fulu-sold-out-badge:hover .fulu-sold-out-text {
+    opacity: 1;
+    transition-delay: 0.1s;
+  }
+
   /* Variants (Kept for compatibility if your products have them) */
   .fulu-form-group { margin-bottom: 20px; }
   .fulu-options { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;}
@@ -907,45 +946,6 @@
     }
     .fulu-quick-add-btn {
       display: none !important;
-    }
-  }
-
-    @media screen and (max-width: 600px) {
-      .fulu-gallery {
-        margin-top: 25svh;
-      }
-    }
-
-    @media screen and (max-width: 350px) {
-      .fulu-gallery {
-        margin-top: 20svh;
-      }
-    }
-</style>screen and (max-width: 768px) {
-    .fulu-page-product-container {
-      grid-template-columns: 1fr;
-    }
-    .fulu-product-spacer {
-      display: none;
-    }
-    .fulu-product-container {
-      width: 100%;
-      margin-top: 20px;
-    }
-    .fulu-product {
-      width: 90%;
-      right: 0;
-      margin: 0 auto;
-    }
-    .fulu-gallery {
-      margin-top: 40svh;
-    }
-    .fulu-related-grid {
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
-    .fulu-product-title {
-      opacity: 1;
     }
   }
 

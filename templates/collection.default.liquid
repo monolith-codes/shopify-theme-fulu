@@ -93,6 +93,11 @@
                                         <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" height="800">
                                     </div>
                                     <div class="fulu-product-title">{{ product.title }}</div>
+                                    {% unless product.available %}
+                                      <div class="fulu-sold-out-badge">
+                                        <span class="fulu-sold-out-text">sold out</span>
+                                      </div>
+                                    {% endunless %}
                                 </a>
                                 {% if product.available %}
                                   <button class="fulu-quick-add-btn" data-variant-id="{{ product.first_available_variant.id }}" aria-label="Quick add to cart">
@@ -377,6 +382,40 @@
 
     .fulu-product-item:hover .fulu-product-title {
         opacity: 1;
+    }
+
+    .fulu-sold-out-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        height: 24px;
+        width: 24px;
+        background-color: #ff0000;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: width 0.3s ease;
+        z-index: 10;
+    }
+
+    .fulu-sold-out-badge:hover {
+        width: 80px;
+    }
+
+    .fulu-sold-out-text {
+        color: white;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .fulu-sold-out-badge:hover .fulu-sold-out-text {
+        opacity: 1;
+        transition-delay: 0.1s;
     }
 
     @media screen and (max-width: 768px) {

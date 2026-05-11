@@ -218,20 +218,24 @@
   .fulu-cart-floating-btn {
     position: fixed;
     top: 50%;
-    right: 20px;
+    right: 0;
     transform: translateY(-50%);
     background: #000;
     color: #fff;
     border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    border-radius: 20px 0 0 20px;
+    padding: 16px 12px;
+    width: 48px;
+    height: auto;
+    min-height: 80px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     cursor: pointer;
     z-index: 999990;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: -2px 4px 12px rgba(0,0,0,0.15);
     transition: opacity 0.3s, visibility 0.3s;
     opacity: 0;
     visibility: hidden;
@@ -241,15 +245,12 @@
     visibility: visible;
   }
   .fulu-cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff0000;
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: bold;
-    width: 20px;
-    height: 20px;
+    background: #fff;
+    color: #000;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -392,5 +393,7 @@
 
     // Initial fetch to set floating button visibility
     fetchCart();
+  });
+</script>  fetchCart();
   });
 </script>
