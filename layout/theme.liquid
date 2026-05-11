@@ -40,6 +40,142 @@
                 {{ content_for_layout }}            
             </main>
         </div>
+        {% render 'cart-menu' %}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Global Quick Add to Cart Logic
+                document.body.addEventListener('click', function(e) {
+                    const btn = e.target.closest('.fulu-quick-add-btn');
+                    if (!btn) return;
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const variantId = btn.getAttribute('data-variant-id');
+                    if (!variantId) return;
+
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<div class="fulu-spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>';
+                    btn.disabled = true;
+
+                    const formData = new FormData();
+                    formData.append('id', variantId);
+                    formData.append('quantity', 1);
+
+                    const addUrl = window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js';
+
+                    fetch(addUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(errorData => {
+                                throw new Error(errorData.description || errorData.message || 'Error adding to cart');
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(cart => {
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                        
+                        if (typeof window.fuluOpenCart === 'function') {
+                            window.fuluOpenCart();
+                        } else {
+                            document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+                            document.dispatchEvent(new CustomEvent('cart:open'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Quick Add Error:', err);
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                        
+                        if (typeof window.fuluOpenCart === 'function') {
+                            window.fuluOpenCart();
+                        } else {
+                            document.dispatchEvent(new CustomEvent('cart:open'));
+                        }
+                    });
+                });
+            });
+        </script>
+        <style>
+            /* Global Quick Add Button Styles */
+            .fulu-product-item-wrapper {
+                position: relative;
+                display: block;
+                border-radius: 15px;
+                overflow: hidden;
+            }
+
+            .fulu-quick-add-btn {
+                position: absolute;
+                bottom: 20px;
+                right: 20px;
+                background: #fff;
+                color: #000;
+                border: none;
+                border-radius: 20px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(10px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 5;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                overflow: hidden;
+            }
+
+            .fulu-quick-add-icons {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+            }
+
+            .fulu-quick-add-plus {
+                opacity: 0;
+                width: 0;
+                transform: translateX(-10px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .fulu-quick-add-btn:hover {
+                background: #000;
+                color: #fff;
+                width: 70px;
+            }
+
+            .fulu-quick-add-btn:hover .fulu-quick-add-plus {
+                opacity: 1;
+                width: 16px;
+                transform: translateX(0);
+            }
+
+            .fulu-product-item-wrapper:hover .fulu-quick-add-btn {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            @media screen and (max-width: 768px) {
+                .fulu-quick-add-btn {
+                    display: none !important;
+                }
+            }
+        </style>
     </body>
 </html>
 

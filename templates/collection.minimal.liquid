@@ -37,12 +37,22 @@
                     
                     <div class="fulu-product-grid">
                         {% for product in collection.products %}
-                            <a href="{{ product.url }}" class="fulu-product-item" data-product-type="{{ product.type | handleize }}" data-tags="{{ product.tags | join: ',' | downcase }}">
-                                <div class="fulu-product-image-wrapper">
-                                    <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" height="800">
-                                </div>
-                                <div class="fulu-product-title">{{ product.title }}</div>
-                            </a>
+                            <div class="fulu-product-item-wrapper" data-product-type="{{ product.type | handleize }}" data-tags="{{ product.tags | join: ',' | downcase }}">
+                                <a href="{{ product.url }}" class="fulu-product-item">
+                                    <div class="fulu-product-image-wrapper">
+                                        <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" height="800">
+                                    </div>
+                                    <div class="fulu-product-title">{{ product.title }}</div>
+                                </a>
+                                {% if product.available %}
+                                  <button class="fulu-quick-add-btn" data-variant-id="{{ product.first_available_variant.id }}" aria-label="Quick add to cart">
+                                    <span class="fulu-quick-add-icons">
+                                      <svg class="lucide lucide-shopping-cart" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                                      <svg class="lucide lucide-plus fulu-quick-add-plus" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </span>
+                                  </button>
+                                {% endif %}
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -57,7 +67,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         // 1. Grab ALL filter links from BOTH the desktop and mobile menus
         const filterLinks = document.querySelectorAll('.shop-menu a, .fulu-filter-menu-dropdown a');
-        const products = document.querySelectorAll('.fulu-product-item');
+        const products = document.querySelectorAll('.fulu-product-item-wrapper');
         const filterMenu = document.querySelector('.fulu-collection-filter-menu');
         const burgerBtn = document.querySelector('.fulu-filter-burger-button');
         const currentFilterDisplay = document.querySelector('.fulu-current-filter');

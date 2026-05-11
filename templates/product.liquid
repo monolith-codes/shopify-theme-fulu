@@ -171,12 +171,22 @@
                 {% assign counter = 0 %}
                 {% for related_product in current_collection.products %}
                   {% unless related_product.id == product.id %}
-                    <a href="{{ related_product.url }}" class="fulu-product-item">
-                      <div class="fulu-product-image-wrapper">
-                        <img src="{{ related_product.featured_image | image_url: width: 800 }}" alt="{{ related_product.title }}" loading="lazy" width="800" height="800">
-                      </div>
-                      <div class="fulu-product-title">{{ related_product.title }}</div>
-                    </a>
+                    <div class="fulu-product-item-wrapper">
+                      <a href="{{ related_product.url }}" class="fulu-product-item">
+                        <div class="fulu-product-image-wrapper">
+                          <img src="{{ related_product.featured_image | image_url: width: 800 }}" alt="{{ related_product.title }}" loading="lazy" width="800" height="800">
+                        </div>
+                        <div class="fulu-product-title">{{ related_product.title }}</div>
+                      </a>
+                      {% if related_product.available %}
+                        <button class="fulu-quick-add-btn" data-variant-id="{{ related_product.first_available_variant.id }}" aria-label="Quick add to cart">
+                          <span class="fulu-quick-add-icons">
+                            <svg class="lucide lucide-shopping-cart" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                            <svg class="lucide lucide-plus fulu-quick-add-plus" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                          </span>
+                        </button>
+                      {% endif %}
+                    </div>
                     {% assign counter = counter | plus: 1 %}
                     {% if counter == 3 %}{% break %}{% endif %}
                   {% endunless %}
@@ -337,25 +347,63 @@
       return (cents / 100).toLocaleString('en-US', {style: 'currency', currency: 'EUR'});
     }
 
-    const productForm = document.querySelector('form[action*="/cart/add"]');
+    const productForm = addToCartBtn ? addToCartBtn.closest('form') : null;
     if (productForm) {
       productForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const submitBtn = productForm.querySelector('[type="submit"]');
+        
+        // Prevent multiple submissions
+        if (productForm.dataset.submitting === 'true') return;
+        productForm.dataset.submitting = 'true';
+        
+        const submitBtn = productForm.querySelector('[type="submit"]') || addToCartBtn;
+        
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Adding...';
 
         const formData = new FormData(productForm);
-        const action = productForm.getAttribute('action') + '.js';
 
-        fetch(action, {
+        fetch(window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {
           method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          },
           body: formData
         })
-        .then(() => {
-          window.location.reload();
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(errorData => {
+               throw new Error(errorData.description || errorData.message || 'Error adding to cart');
+            });
+          }
+          return response.json();
+        })
+        .then((cart) => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Add to cart';
+          productForm.dataset.submitting = 'false';
+          
+          if (typeof window.fuluOpenCart === 'function') {
+            window.fuluOpenCart();
+          } else {
+            document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+            document.dispatchEvent(new CustomEvent('cart:open'));
+          }
         })
         .catch((e) => {
-          console.error(e);
-          window.location.reload();
+          console.error('Add to cart error:', e);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Add to cart';
+          productForm.dataset.submitting = 'false';
+          
+          // Instead of alerting, just open the cart so the user sees their max quantity
+          if (typeof window.fuluOpenCart === 'function') {
+            window.fuluOpenCart();
+          } else {
+            document.dispatchEvent(new CustomEvent('cart:open'));
+          }
         });
       });
     }
@@ -832,6 +880,48 @@
   }
 
   @media screen and (max-width: 768px) {
+    .fulu-page-product-container {
+      grid-template-columns: 1fr;
+    }
+    .fulu-product-spacer {
+      display: none;
+    }
+    .fulu-product-container {
+      width: 100%;
+      margin-top: 20px;
+    }
+    .fulu-product {
+      width: 90%;
+      right: 0;
+      margin: 0 auto;
+    }
+    .fulu-gallery {
+      margin-top: 40svh;
+    }
+    .fulu-related-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    .fulu-product-title {
+      opacity: 1;
+    }
+    .fulu-quick-add-btn {
+      display: none !important;
+    }
+  }
+
+    @media screen and (max-width: 600px) {
+      .fulu-gallery {
+        margin-top: 25svh;
+      }
+    }
+
+    @media screen and (max-width: 350px) {
+      .fulu-gallery {
+        margin-top: 20svh;
+      }
+    }
+</style>screen and (max-width: 768px) {
     .fulu-page-product-container {
       grid-template-columns: 1fr;
     }

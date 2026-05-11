@@ -1,0 +1,396 @@
+<div id="fulu-cart-menu" class="fulu-cart-sidebar">
+  <div class="fulu-cart-header">
+    <h2>Your Cart</h2>
+    <button id="fulu-cart-close" aria-label="Close Cart">
+      <svg class="lucide lucide-x" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+    </button>
+  </div>
+  <div id="fulu-cart-items" class="fulu-cart-items">
+    <!-- Items will be injected here via JS -->
+  </div>
+  <div class="fulu-cart-footer">
+    <div class="fulu-cart-total-row">
+      <span>Total</span>
+      <span id="fulu-cart-total-price">€0.00</span>
+    </div>
+    
+    {% if linklists['cartmenu'].links.size > 0 %}
+      <div class="fulu-cart-menu-links">
+        {% for link in linklists['cartmenu'].links %}
+          <a href="{{ link.url }}" class="fulu-cart-menu-link">{{ link.title }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <button type="submit" name="checkout" class="fulu-cart-checkout-btn fulu-checkout-submit">Checkout</button>
+    </form>
+  </div>
+</div>
+
+<div id="fulu-cart-overlay" class="fulu-cart-overlay"></div>
+
+<button id="fulu-cart-floating-btn" class="fulu-cart-floating-btn" aria-label="Open Cart">
+  <svg class="lucide lucide-shopping-cart" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+  <span id="fulu-cart-count" class="fulu-cart-count">0</span>
+</button>
+
+<style>
+  /* Cart Sidebar */
+  .fulu-cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: #fff;
+    z-index: 2147483647;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+  }
+  .fulu-cart-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  .fulu-cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  .fulu-cart-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  #fulu-cart-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #000;
+  }
+
+  .fulu-cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  
+  .fulu-cart-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .fulu-cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .fulu-cart-item-details {
+    flex: 1;
+  }
+  .fulu-cart-item-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .fulu-cart-item-price {
+    color: #555;
+    margin-bottom: 10px;
+  }
+  .fulu-cart-item-variant {
+    color: #777;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+  }
+  .fulu-cart-item-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .fulu-cart-qty-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .fulu-cart-qty-btn {
+    background: #f9f9f9;
+    border: none;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    transition: background 0.2s;
+  }
+  .fulu-cart-qty-btn:hover {
+    background: #eaeaea;
+  }
+  .fulu-cart-qty-value {
+    padding: 0 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .fulu-cart-item-remove {
+    background: none;
+    border: none;
+    color: #999;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.8rem;
+  }
+
+  .fulu-cart-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+  }
+  .fulu-cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  .fulu-cart-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .fulu-cart-menu-link {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .fulu-cart-menu-link:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+  .fulu-cart-checkout-btn {
+    display: block;
+    width: 100%;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .fulu-cart-checkout-btn:hover {
+    background: #fff;
+    color: #000;
+  }
+
+  /* Overlay */
+  .fulu-cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 999998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .fulu-cart-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Floating Button */
+  .fulu-cart-floating-btn {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 999990;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .fulu-cart-floating-btn.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .fulu-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff0000;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cartMenu = document.getElementById('fulu-cart-menu');
+    const cartOverlay = document.getElementById('fulu-cart-overlay');
+    const closeBtn = document.getElementById('fulu-cart-close');
+    const floatingBtn = document.getElementById('fulu-cart-floating-btn');
+    const cartItemsContainer = document.getElementById('fulu-cart-items');
+    const totalPriceEl = document.getElementById('fulu-cart-total-price');
+    const cartCountEl = document.getElementById('fulu-cart-count');
+
+    function formatMoney(cents) {
+      if (typeof Shopify !== 'undefined' && Shopify.formatMoney) {
+        return Shopify.formatMoney(cents);
+      }
+      return (cents / 100).toLocaleString('en-US', {style: 'currency', currency: 'EUR'});
+    }
+
+    function openCart() {
+      console.log('openCart triggered');
+      cartMenu.classList.add('open');
+      cartOverlay.classList.add('open');
+      fetchCart();
+    }
+
+    function closeCart() {
+      cartMenu.classList.remove('open');
+      cartOverlay.classList.remove('open');
+    }
+
+    closeBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    floatingBtn.addEventListener('click', openCart);
+
+    // Global fallbacks for direct calling
+    window.fuluOpenCart = openCart;
+    window.fuluFetchCart = fetchCart;
+
+    document.addEventListener('cart:open', openCart);
+    document.addEventListener('cart:updated', fetchCart);
+
+    function fetchCart() {
+      fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+          renderCart(cart);
+        })
+        .catch(err => console.error('Error fetching cart:', err));
+    }
+
+    function renderCart(cart) {
+      cartItemsContainer.innerHTML = '';
+      
+      if (cart.item_count > 0) {
+        floatingBtn.classList.add('visible');
+        cartCountEl.textContent = cart.item_count;
+        totalPriceEl.textContent = formatMoney(cart.total_price);
+
+        cart.items.forEach(item => {
+          const itemEl = document.createElement('div');
+          itemEl.classList.add('fulu-cart-item');
+          
+          const imageUrl = item.image || '';
+          
+          itemEl.innerHTML = `
+            ${imageUrl ? `<img src="${imageUrl}" alt="${item.title}">` : ''}
+            <div class="fulu-cart-item-details">
+              <div class="fulu-cart-item-title">${item.product_title}</div>
+              ${item.variant_title ? `<div class="fulu-cart-item-variant">${item.variant_title}</div>` : ''}
+              <div class="fulu-cart-item-price">${formatMoney(item.line_price)}</div>
+              
+              <div class="fulu-cart-item-actions">
+                <div class="fulu-cart-qty-selector">
+                  <button class="fulu-cart-qty-btn" data-key="${item.key}" data-qty="${item.quantity - 1}">-</button>
+                  <span class="fulu-cart-qty-value">${item.quantity}</span>
+                  <button class="fulu-cart-qty-btn" data-key="${item.key}" data-qty="${item.quantity + 1}">+</button>
+                </div>
+                <button class="fulu-cart-item-remove" data-key="${item.key}">Remove</button>
+              </div>
+            </div>
+          `;
+          cartItemsContainer.appendChild(itemEl);
+        });
+
+        const removeBtns = document.querySelectorAll('.fulu-cart-item-remove');
+        removeBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            updateCartItem(key, 0);
+          });
+        });
+
+        const qtyBtns = document.querySelectorAll('.fulu-cart-qty-btn');
+        qtyBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            const qty = parseInt(this.getAttribute('data-qty'), 10);
+            updateCartItem(key, qty);
+          });
+        });
+      } else {
+        floatingBtn.classList.remove('visible');
+        cartCountEl.textContent = '0';
+        totalPriceEl.textContent = formatMoney(0);
+        cartItemsContainer.innerHTML = '<p>Your cart is currently empty.</p>';
+      }
+    }
+
+    function updateCartItem(key, quantity) {
+      const updateUrl = window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root + 'cart/change.js' : '/cart/change.js';
+      fetch(updateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: key,
+          quantity: quantity
+        })
+      })
+      .then(res => {
+        if (!res.ok) {
+          // If 422 or error, just fetch the cart to ensure UI is in sync with actual limits
+          fetchCart();
+          throw new Error('Quantity limit reached or network error');
+        }
+        return res.json();
+      })
+      .then(cart => {
+        if(cart) renderCart(cart);
+      })
+      .catch(err => console.error('Notice:', err));
+    }
+
+    // Initial fetch to set floating button visibility
+    fetchCart();
+  });
+</script>
