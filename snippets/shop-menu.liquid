@@ -9,39 +9,6 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const filterLinks = document.querySelectorAll('.shop-menu a');
-        const products = document.querySelectorAll('.fulu-product-item');
-
-        filterLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-
-                e.preventDefault();
-                
-                filterLinks.forEach(el => el.classList.remove('active'));
-                link.classList.add('active');
-
-                const filter = link.getAttribute('data-filter');
-                
-                products.forEach(product => {
-                    const productType = product.getAttribute('data-product-type') || '';
-                    const productTags = product.getAttribute('data-tags') || '';
-                    
-                    if (filter === 'all' || productType === filter || productTags.includes(filter)) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                // Trigger a resize event to make other components recalculate layout
-                window.dispatchEvent(new Event('resize'));
-            });
-        });
-    });
-</script>
-
 <style>
     .shop-menu-wrapper {
         position: fixed;
